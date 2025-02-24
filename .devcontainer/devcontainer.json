@@ -30,6 +30,7 @@
       ],
       "settings": {
         "git.autofetch": true,
+        "git.useEditorAsCommitInput": false,
         "scm.showActionButton": false,
         "scm.showInputActionButton": false,
         "workbench.editor.labelFormat": "short",
