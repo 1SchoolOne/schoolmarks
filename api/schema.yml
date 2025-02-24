@@ -1,0 +1,2583 @@
+openapi: 3.0.3
+info:
+  title: ''
+  version: 0.0.0
+paths:
+  /attendance_details/:
+    get:
+      operationId: attendance_details_list
+      tags:
+      - attendance_details
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AttendanceDetail'
+          description: ''
+    post:
+      operationId: attendance_details_create
+      tags:
+      - attendance_details
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttendanceDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AttendanceDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AttendanceDetail'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttendanceDetail'
+          description: ''
+  /attendance_details/{id}/:
+    get:
+      operationId: attendance_details_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attendance detail.
+        required: true
+      tags:
+      - attendance_details
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttendanceDetail'
+          description: ''
+    put:
+      operationId: attendance_details_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attendance detail.
+        required: true
+      tags:
+      - attendance_details
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttendanceDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AttendanceDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AttendanceDetail'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttendanceDetail'
+          description: ''
+    patch:
+      operationId: attendance_details_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attendance detail.
+        required: true
+      tags:
+      - attendance_details
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAttendanceDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAttendanceDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAttendanceDetail'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttendanceDetail'
+          description: ''
+    delete:
+      operationId: attendance_details_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attendance detail.
+        required: true
+      tags:
+      - attendance_details
+      responses:
+        '204':
+          description: No response body
+  /attendance_records/:
+    get:
+      operationId: attendance_records_list
+      tags:
+      - attendance_records
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AttendanceRecord'
+          description: ''
+    post:
+      operationId: attendance_records_create
+      tags:
+      - attendance_records
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttendanceRecord'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AttendanceRecord'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AttendanceRecord'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttendanceRecord'
+          description: ''
+  /attendance_records/{id}/:
+    get:
+      operationId: attendance_records_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attendance record.
+        required: true
+      tags:
+      - attendance_records
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttendanceRecord'
+          description: ''
+    put:
+      operationId: attendance_records_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attendance record.
+        required: true
+      tags:
+      - attendance_records
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttendanceRecord'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AttendanceRecord'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AttendanceRecord'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttendanceRecord'
+          description: ''
+    patch:
+      operationId: attendance_records_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attendance record.
+        required: true
+      tags:
+      - attendance_records
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAttendanceRecord'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAttendanceRecord'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAttendanceRecord'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttendanceRecord'
+          description: ''
+    delete:
+      operationId: attendance_records_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attendance record.
+        required: true
+      tags:
+      - attendance_records
+      responses:
+        '204':
+          description: No response body
+  /checkin_sessions/:
+    get:
+      operationId: checkin_sessions_list
+      tags:
+      - checkin_sessions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CheckinSession'
+          description: ''
+    post:
+      operationId: checkin_sessions_create
+      tags:
+      - checkin_sessions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckinSession'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CheckinSession'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CheckinSession'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckinSession'
+          description: ''
+  /checkin_sessions/{id}/:
+    get:
+      operationId: checkin_sessions_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this checkin session.
+        required: true
+      tags:
+      - checkin_sessions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckinSession'
+          description: ''
+    put:
+      operationId: checkin_sessions_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this checkin session.
+        required: true
+      tags:
+      - checkin_sessions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckinSession'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CheckinSession'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CheckinSession'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckinSession'
+          description: ''
+    patch:
+      operationId: checkin_sessions_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this checkin session.
+        required: true
+      tags:
+      - checkin_sessions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCheckinSession'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCheckinSession'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCheckinSession'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckinSession'
+          description: ''
+    delete:
+      operationId: checkin_sessions_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this checkin session.
+        required: true
+      tags:
+      - checkin_sessions
+      responses:
+        '204':
+          description: No response body
+  /checkin_sessions/{id}/totp/:
+    get:
+      operationId: checkin_sessions_totp_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this checkin session.
+        required: true
+      tags:
+      - checkin_sessions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckinSession'
+          description: ''
+  /class_sessions/:
+    get:
+      operationId: class_sessions_list
+      tags:
+      - class_sessions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClassSessionDetail'
+          description: ''
+    post:
+      operationId: class_sessions_create
+      tags:
+      - class_sessions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassSession'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClassSession'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClassSession'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassSession'
+          description: ''
+  /class_sessions/{id}/:
+    get:
+      operationId: class_sessions_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this class session.
+        required: true
+      tags:
+      - class_sessions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassSessionDetail'
+          description: ''
+    put:
+      operationId: class_sessions_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this class session.
+        required: true
+      tags:
+      - class_sessions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassSession'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClassSession'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClassSession'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassSession'
+          description: ''
+    patch:
+      operationId: class_sessions_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this class session.
+        required: true
+      tags:
+      - class_sessions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedClassSessionDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedClassSessionDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedClassSessionDetail'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassSessionDetail'
+          description: ''
+    delete:
+      operationId: class_sessions_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this class session.
+        required: true
+      tags:
+      - class_sessions
+      responses:
+        '204':
+          description: No response body
+  /class_students/:
+    get:
+      operationId: class_students_list
+      tags:
+      - class_students
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClassStudent'
+          description: ''
+    post:
+      operationId: class_students_create
+      tags:
+      - class_students
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassStudent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClassStudent'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClassStudent'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassStudent'
+          description: ''
+  /class_students/{id}/:
+    get:
+      operationId: class_students_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this class student.
+        required: true
+      tags:
+      - class_students
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassStudent'
+          description: ''
+    put:
+      operationId: class_students_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this class student.
+        required: true
+      tags:
+      - class_students
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassStudent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClassStudent'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClassStudent'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassStudent'
+          description: ''
+    patch:
+      operationId: class_students_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this class student.
+        required: true
+      tags:
+      - class_students
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedClassStudent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedClassStudent'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedClassStudent'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassStudent'
+          description: ''
+    delete:
+      operationId: class_students_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this class student.
+        required: true
+      tags:
+      - class_students
+      responses:
+        '204':
+          description: No response body
+  /classes/:
+    get:
+      operationId: classes_list
+      tags:
+      - classes
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Class'
+          description: ''
+    post:
+      operationId: classes_create
+      tags:
+      - classes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Class'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Class'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Class'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Class'
+          description: ''
+  /classes/{id}/:
+    get:
+      operationId: classes_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this class.
+        required: true
+      tags:
+      - classes
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Class'
+          description: ''
+    put:
+      operationId: classes_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this class.
+        required: true
+      tags:
+      - classes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Class'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Class'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Class'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Class'
+          description: ''
+    patch:
+      operationId: classes_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this class.
+        required: true
+      tags:
+      - classes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedClass'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedClass'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedClass'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Class'
+          description: ''
+    delete:
+      operationId: classes_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this class.
+        required: true
+      tags:
+      - classes
+      responses:
+        '204':
+          description: No response body
+  /classes/{id}/update_students/:
+    put:
+      operationId: classes_update_students_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this class.
+        required: true
+      tags:
+      - classes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Class'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Class'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Class'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Class'
+          description: ''
+  /classes/bulk_delete/:
+    post:
+      operationId: classes_bulk_delete_create
+      tags:
+      - classes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Class'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Class'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Class'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Class'
+          description: ''
+  /course_enrollments/:
+    get:
+      operationId: course_enrollments_list
+      tags:
+      - course_enrollments
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseEnrollment'
+          description: ''
+    post:
+      operationId: course_enrollments_create
+      tags:
+      - course_enrollments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseEnrollment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CourseEnrollment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourseEnrollment'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseEnrollment'
+          description: ''
+  /course_enrollments/{id}/:
+    get:
+      operationId: course_enrollments_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this course enrollment.
+        required: true
+      tags:
+      - course_enrollments
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseEnrollment'
+          description: ''
+    put:
+      operationId: course_enrollments_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this course enrollment.
+        required: true
+      tags:
+      - course_enrollments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseEnrollment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CourseEnrollment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourseEnrollment'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseEnrollment'
+          description: ''
+    patch:
+      operationId: course_enrollments_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this course enrollment.
+        required: true
+      tags:
+      - course_enrollments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseEnrollment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseEnrollment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseEnrollment'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseEnrollment'
+          description: ''
+    delete:
+      operationId: course_enrollments_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this course enrollment.
+        required: true
+      tags:
+      - course_enrollments
+      responses:
+        '204':
+          description: No response body
+  /course_enrollments/bulk_delete/:
+    post:
+      operationId: course_enrollments_bulk_delete_create
+      tags:
+      - course_enrollments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseEnrollment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CourseEnrollment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourseEnrollment'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseEnrollment'
+          description: ''
+  /courses/:
+    get:
+      operationId: courses_list
+      tags:
+      - courses
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Course'
+          description: ''
+    post:
+      operationId: courses_create
+      tags:
+      - courses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Course'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Course'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+          description: ''
+  /courses/{id}/:
+    get:
+      operationId: courses_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this course.
+        required: true
+      tags:
+      - courses
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+          description: ''
+    put:
+      operationId: courses_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this course.
+        required: true
+      tags:
+      - courses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Course'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Course'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+          description: ''
+    patch:
+      operationId: courses_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this course.
+        required: true
+      tags:
+      - courses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCourse'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCourse'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCourse'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+          description: ''
+    delete:
+      operationId: courses_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this course.
+        required: true
+      tags:
+      - courses
+      responses:
+        '204':
+          description: No response body
+  /courses/bulk_delete/:
+    post:
+      operationId: courses_bulk_delete_create
+      tags:
+      - courses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Course'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Course'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+          description: ''
+  /grades/:
+    get:
+      operationId: grades_list
+      tags:
+      - grades
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Grade'
+          description: ''
+    post:
+      operationId: grades_create
+      tags:
+      - grades
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Grade'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Grade'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Grade'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grade'
+          description: ''
+  /grades/{id}/:
+    get:
+      operationId: grades_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this grade.
+        required: true
+      tags:
+      - grades
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grade'
+          description: ''
+    put:
+      operationId: grades_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this grade.
+        required: true
+      tags:
+      - grades
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Grade'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Grade'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Grade'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grade'
+          description: ''
+    patch:
+      operationId: grades_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this grade.
+        required: true
+      tags:
+      - grades
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedGrade'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedGrade'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedGrade'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grade'
+          description: ''
+    delete:
+      operationId: grades_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this grade.
+        required: true
+      tags:
+      - grades
+      responses:
+        '204':
+          description: No response body
+  /import/{import_id}/:
+    get:
+      operationId: import_retrieve
+      parameters:
+      - in: path
+        name: import_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - import
+      responses:
+        '200':
+          description: No response body
+  /import/classes/:
+    get:
+      operationId: import_classes_retrieve
+      tags:
+      - import
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: import_classes_create
+      tags:
+      - import
+      responses:
+        '200':
+          description: No response body
+  /import/courses/:
+    get:
+      operationId: import_courses_retrieve
+      tags:
+      - import
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: import_courses_create
+      tags:
+      - import
+      responses:
+        '200':
+          description: No response body
+  /import/users/:
+    get:
+      operationId: import_users_retrieve
+      tags:
+      - import
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: import_users_create
+      tags:
+      - import
+      responses:
+        '200':
+          description: No response body
+  /schema/:
+    get:
+      operationId: schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - schema
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /student_grades/:
+    get:
+      operationId: student_grades_list
+      tags:
+      - student_grades
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentGrade'
+          description: ''
+    post:
+      operationId: student_grades_create
+      tags:
+      - student_grades
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentGrade'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudentGrade'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudentGrade'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentGrade'
+          description: ''
+  /student_grades/{id}/:
+    get:
+      operationId: student_grades_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this student grade.
+        required: true
+      tags:
+      - student_grades
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentGrade'
+          description: ''
+    put:
+      operationId: student_grades_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this student grade.
+        required: true
+      tags:
+      - student_grades
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentGrade'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudentGrade'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudentGrade'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentGrade'
+          description: ''
+    patch:
+      operationId: student_grades_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this student grade.
+        required: true
+      tags:
+      - student_grades
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentGrade'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentGrade'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentGrade'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentGrade'
+          description: ''
+    delete:
+      operationId: student_grades_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this student grade.
+        required: true
+      tags:
+      - student_grades
+      responses:
+        '204':
+          description: No response body
+  /users/:
+    get:
+      operationId: users_list
+      tags:
+      - users
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: ''
+    post:
+      operationId: users_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /users/{id}/:
+    get:
+      operationId: users_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: users_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: users_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: users_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    AttendanceDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        attendance_record:
+          type: string
+          format: uuid
+        student:
+          type: integer
+        class_session:
+          type: string
+          format: uuid
+        course:
+          type: string
+          format: uuid
+        status:
+          type: string
+          maxLength: 20
+        checked_in_at:
+          type: string
+          format: date-time
+        minutes_late:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - attendance_record
+      - checked_in_at
+      - class_session
+      - course
+      - created_at
+      - id
+      - minutes_late
+      - status
+      - student
+    AttendanceRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        checkin_session:
+          type: string
+          format: uuid
+        student:
+          type: integer
+          writeOnly: true
+        student_detail:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        checked_in_at:
+          type: string
+          format: date-time
+        status:
+          type: string
+          maxLength: 50
+      required:
+      - checked_in_at
+      - checkin_session
+      - id
+      - status
+      - student
+      - student_detail
+    CheckinSession:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        class_session:
+          type: string
+          format: uuid
+        started_at:
+          type: string
+          format: date-time
+        closed_at:
+          type: string
+          format: date-time
+        created_by:
+          type: integer
+        status:
+          type: string
+          maxLength: 50
+        secret:
+          type: string
+          nullable: true
+          maxLength: 32
+      required:
+      - class_session
+      - closed_at
+      - created_by
+      - id
+      - started_at
+      - status
+    Class:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        students:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 255
+        code:
+          type: string
+          maxLength: 50
+        year_of_graduation:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          title: Année de diplôme
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Créé le
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Mis à jour le
+      required:
+      - code
+      - created_at
+      - id
+      - name
+      - students
+      - updated_at
+    ClassSession:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        course:
+          type: string
+          format: uuid
+        date:
+          type: string
+          format: date
+        start_time:
+          type: string
+          format: time
+        end_time:
+          type: string
+          format: time
+        room:
+          type: string
+          maxLength: 50
+        status:
+          type: string
+          maxLength: 50
+      required:
+      - course
+      - date
+      - end_time
+      - id
+      - room
+      - start_time
+      - status
+    ClassSessionDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        course:
+          allOf:
+          - $ref: '#/components/schemas/Course'
+          readOnly: true
+        date:
+          type: string
+          format: date
+        start_time:
+          type: string
+          format: time
+        end_time:
+          type: string
+          format: time
+        room:
+          type: string
+          maxLength: 50
+        status:
+          type: string
+          maxLength: 50
+        checkin_session:
+          type: string
+          readOnly: true
+      required:
+      - checkin_session
+      - course
+      - date
+      - end_time
+      - id
+      - room
+      - start_time
+      - status
+    ClassStudent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        class_group:
+          type: string
+          format: uuid
+        student:
+          type: integer
+      required:
+      - class_group
+      - id
+      - student
+    Course:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 255
+        code:
+          type: string
+          maxLength: 50
+        professor:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        professor_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Créé le
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Mis à jour le
+      required:
+      - code
+      - created_at
+      - id
+      - name
+      - professor
+      - updated_at
+    CourseEnrollment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        course_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        class_group_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        course:
+          allOf:
+          - $ref: '#/components/schemas/Course'
+          readOnly: true
+        class_group:
+          allOf:
+          - $ref: '#/components/schemas/Class'
+          readOnly: true
+        enrolled_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - class_group
+      - class_group_id
+      - course
+      - course_id
+      - enrolled_at
+      - id
+    Grade:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        course:
+          type: string
+          format: uuid
+          title: Cours
+        name:
+          type: string
+          title: Nom de l'évaluation
+          maxLength: 255
+        max_value:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          title: Note maximale
+        coef:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          title: Coefficient
+          description: Pourcentage de la note finale
+        description:
+          type: string
+          nullable: true
+        class_group:
+          allOf:
+          - $ref: '#/components/schemas/Class'
+          readOnly: true
+        student_grades:
+          type: array
+          items:
+            $ref: '#/components/schemas/StudentGrade'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Créé le
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Mis à jour le
+      required:
+      - class_group
+      - coef
+      - course
+      - created_at
+      - id
+      - max_value
+      - name
+      - student_grades
+      - updated_at
+    PatchedAttendanceDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        attendance_record:
+          type: string
+          format: uuid
+        student:
+          type: integer
+        class_session:
+          type: string
+          format: uuid
+        course:
+          type: string
+          format: uuid
+        status:
+          type: string
+          maxLength: 20
+        checked_in_at:
+          type: string
+          format: date-time
+        minutes_late:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedAttendanceRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        checkin_session:
+          type: string
+          format: uuid
+        student:
+          type: integer
+          writeOnly: true
+        student_detail:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        checked_in_at:
+          type: string
+          format: date-time
+        status:
+          type: string
+          maxLength: 50
+    PatchedCheckinSession:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        class_session:
+          type: string
+          format: uuid
+        started_at:
+          type: string
+          format: date-time
+        closed_at:
+          type: string
+          format: date-time
+        created_by:
+          type: integer
+        status:
+          type: string
+          maxLength: 50
+        secret:
+          type: string
+          nullable: true
+          maxLength: 32
+    PatchedClass:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        students:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 255
+        code:
+          type: string
+          maxLength: 50
+        year_of_graduation:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          title: Année de diplôme
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Créé le
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Mis à jour le
+    PatchedClassSessionDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        course:
+          allOf:
+          - $ref: '#/components/schemas/Course'
+          readOnly: true
+        date:
+          type: string
+          format: date
+        start_time:
+          type: string
+          format: time
+        end_time:
+          type: string
+          format: time
+        room:
+          type: string
+          maxLength: 50
+        status:
+          type: string
+          maxLength: 50
+        checkin_session:
+          type: string
+          readOnly: true
+    PatchedClassStudent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        class_group:
+          type: string
+          format: uuid
+        student:
+          type: integer
+    PatchedCourse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 255
+        code:
+          type: string
+          maxLength: 50
+        professor:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        professor_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Créé le
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Mis à jour le
+    PatchedCourseEnrollment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        course_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        class_group_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        course:
+          allOf:
+          - $ref: '#/components/schemas/Course'
+          readOnly: true
+        class_group:
+          allOf:
+          - $ref: '#/components/schemas/Class'
+          readOnly: true
+        enrolled_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedGrade:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        course:
+          type: string
+          format: uuid
+          title: Cours
+        name:
+          type: string
+          title: Nom de l'évaluation
+          maxLength: 255
+        max_value:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          title: Note maximale
+        coef:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          title: Coefficient
+          description: Pourcentage de la note finale
+        description:
+          type: string
+          nullable: true
+        class_group:
+          allOf:
+          - $ref: '#/components/schemas/Class'
+          readOnly: true
+        student_grades:
+          type: array
+          items:
+            $ref: '#/components/schemas/StudentGrade'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Créé le
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Mis à jour le
+    PatchedStudentGrade:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        grade:
+          type: string
+          format: uuid
+          title: Évaluation
+        student:
+          type: integer
+          title: Étudiant
+        value:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          title: Note
+        comment:
+          type: string
+          nullable: true
+          title: Commentaires
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Créé le
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Mis à jour le
+    PatchedUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        birthday:
+          type: string
+          format: date
+          nullable: true
+        phone_number:
+          type: string
+          nullable: true
+          maxLength: 32
+        has_changed_password:
+          type: boolean
+        role:
+          type: string
+          readOnly: true
+        user_role:
+          allOf:
+          - $ref: '#/components/schemas/UserRoleEnum'
+          writeOnly: true
+    StudentGrade:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        grade:
+          type: string
+          format: uuid
+          title: Évaluation
+        student:
+          type: integer
+          title: Étudiant
+        value:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          title: Note
+        comment:
+          type: string
+          nullable: true
+          title: Commentaires
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Créé le
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Mis à jour le
+      required:
+      - created_at
+      - grade
+      - id
+      - student
+      - updated_at
+      - value
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        birthday:
+          type: string
+          format: date
+          nullable: true
+        phone_number:
+          type: string
+          nullable: true
+          maxLength: 32
+        has_changed_password:
+          type: boolean
+        role:
+          type: string
+          readOnly: true
+        user_role:
+          allOf:
+          - $ref: '#/components/schemas/UserRoleEnum'
+          writeOnly: true
+      required:
+      - email
+      - id
+      - role
+      - user_role
+      - username
+    UserRoleEnum:
+      enum:
+      - student
+      - teacher
+      - admin
+      type: string
+      description: |-
+        * `student` - student
+        * `teacher` - teacher
+        * `admin` - admin

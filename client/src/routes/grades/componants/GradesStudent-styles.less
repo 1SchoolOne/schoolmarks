@@ -1,0 +1,104 @@
+@import './GradesTeacher-styles.less';
+
+@card-border-radius: 8px;
+@card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+@appreciation-bg: #f9f9f9;
+
+.student-grades-table {
+	.ant-table-cell {
+		vertical-align: middle;
+	}
+
+	th:first-child,
+	td:first-child {
+		font-weight: 500;
+	}
+
+	.ant-table-row:nth-child(even) {
+		background-color: rgba(0, 0, 0, 0.02);
+	}
+}
+
+.appreciation-card {
+	margin: 0;
+	border-radius: @card-border-radius;
+	background-color: @appreciation-bg;
+	transition: all 0.3s;
+	height: 100%;
+
+	&:hover {
+		box-shadow: @card-shadow;
+	}
+
+	.appreciation-text {
+		margin-bottom: 0;
+		font-size: 14px;
+		line-height: 1.5;
+		color: rgba(0, 0, 0, 0.85);
+	}
+}
+
+.student-grades-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 16px;
+	margin-top: 16px;
+
+	.student-grade-card {
+		border-radius: @card-border-radius;
+		box-shadow: @card-shadow;
+		transition: all 0.3s;
+
+		&:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		}
+
+		.ant-card-head {
+			background-color: #f0f2f5;
+			border-top-left-radius: @card-border-radius;
+			border-top-right-radius: @card-border-radius;
+		}
+
+		.ant-typography {
+			margin-bottom: 8px;
+		}
+	}
+
+	.appreciation-card {
+		margin-top: 8px;
+	}
+}
+
+@media (max-width: 768px) {
+	.student-grades-cards {
+		grid-template-columns: 1fr;
+	}
+
+	.filters-container {
+		flex-direction: column;
+		align-items: stretch;
+
+		.filter-divider {
+			display: none;
+		}
+
+		.filter-group {
+			flex-direction: column;
+			margin-bottom: 16px;
+		}
+
+		.filter-group-item {
+			margin-bottom: 16px;
+		}
+
+		.filter-reset-all-container {
+			align-items: center;
+			margin-top: 8px;
+
+			.filter-reset-all {
+				margin-left: 0;
+			}
+		}
+	}
+}

@@ -1,0 +1,116 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  django_tests:
+    name: Run Django Tests
+    runs-on: ubuntu-24.04
+        
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        version: "0.6.2"
+
+    - name: Install Dependencies
+      run: cd api && uv sync --all-extras --dev
+
+    - name: Run Tests
+      run: |
+#        uv run manage.py test
+   
+  # docker_publish_api:
+  #   name: Build and Push Docker Image
+  #   needs: django_tests
+  #   runs-on: ubuntu-24.04
+  #   if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v4
+        
+  #     - name: Set up QEMU
+  #       uses: docker/setup-qemu-action@v3
+        
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v3
+  #       with:
+  #         buildkitd-flags: --debug
+          
+  #     - name: Login to Private Registry
+  #       uses: docker/login-action@v3
+  #       with:
+  #         registry: registry.ilhanyapici.com
+  #         username: schoolmarks
+  #         password: ${{ secrets.DOCKER_PASSWORD }}
+
+  #     - name: Set Docker Tag
+  #       id: set-tag
+  #       run: |
+  #         if [[ $GITHUB_REF == 'refs/heads/main' ]]; then
+  #           echo "TAG=main" >> $GITHUB_OUTPUT
+  #         else
+  #           echo "TAG=dev" >> $GITHUB_OUTPUT
+  #         fi
+      
+  #     - name: Build and push Docker image
+  #       uses: docker/build-push-action@v5
+  #       with:
+  #         context: .
+  #         push: true
+  #         tags: registry.ilhanyapici.com/schoolmarks/api:${{ steps.set-tag.outputs.TAG }}
+  #         platforms: linux/amd64,linux/arm64
+  #         cache-from: type=registry,ref=registry.ilhanyapici.com/schoolmarks/api:${{ steps.set-tag.outputs.TAG }}
+  #         cache-to: type=inline
+  #         provenance: false
+
+  # deploy:
+  #   name: Deploy to Server
+  #   needs: [docker_publish_api]
+  #   runs-on: ubuntu-24.04
+  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+  #   steps:
+  #   - name: Deploy using SSH
+  #     env:
+  #       HOST: ${{ secrets.SRV_HOST }}
+  #       USERNAME: ${{ secrets.SRV_USERNAME }} 
+  #       KEY: ${{ secrets.SRV_SSH_PRIVATE_KEY }}
+  #       REGISTRY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  #     run: |
+  #       set -eu
+
+  #       # Configurer SSH
+  #       mkdir -p ~/.ssh
+  #       echo "$KEY" | sed 's/\\n/\n/g' > ~/.ssh/id_rsa
+  #       chmod 600 ~/.ssh/id_rsa
+  #       ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
+
+  #       # Vérifier la connexion SSH
+  #       ssh -o StrictHostKeyChecking=no $USERNAME@$HOST "
+  #         echo 'Connexion SSH réussie'
+  #         echo "$REGISTRY_PASSWORD" | docker login registry.ilhanyapici.com --username schoolmarks --password-stdin
+
+  #         # Vérifier la configuration de Docker Compose
+  #         docker compose config -q
+
+  #         # Donner accès à Docker si nécessaire
+  #         sudo usermod -aG docker $USERNAME || true
+
+  #         # Pull des dernières images
+  #         docker compose pull
+          
+  #         # Redémarrer les services
+  #         docker compose down
+  #         docker compose up -d
+          
+  #         # Nettoyage des anciennes images
+  #         docker image prune -f || true
+  #       "

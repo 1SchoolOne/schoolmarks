@@ -1,0 +1,10 @@
+.idea
+.yarn
+yarn.lock
+**/*.cjs
+**/*.mjs
+**/*.d.ts
+**/*.svg
+**/*.png
+**/*.jpg
+**/*.jpeg

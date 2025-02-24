@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: app-prettier
+        name: run prettier
+        language: system
+        entry: |
+          bash -c 'npx prettier --write "${@}"' --
+        types: [ts, javascript]

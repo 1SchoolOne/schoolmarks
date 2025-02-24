@@ -1,0 +1,24 @@
+# Misc
+node_modules
+.DS_Store
+openapi-schema.yml
+.git
+.githooks
+.github
+.vscode
+.devcontainer
+.env.*
+!.env.production
+*.log
+
+# IntelliJ
+.idea/**/*
+!.idea/prettier.xml
+
+# Tool reports
+eslint_report.json
+.vitest-report
+
+# Build
+build
+*.tsbuildinfo

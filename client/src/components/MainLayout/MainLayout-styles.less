@@ -1,0 +1,23 @@
+.schoolone-main-layout {
+	&.blur-mask {
+		filter: blur(5px);
+	}
+
+	&__header > .ant-flex {
+		height: inherit;
+
+		.schoolone-theme-select__trigger {
+			margin-left: auto;
+			margin-right: var(--ant-margin);
+		}
+
+		.user-menu {
+			height: inherit;
+		}
+	}
+
+	&__content {
+		margin: 0 50px;
+		overflow-y: auto;
+	}
+}

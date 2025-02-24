@@ -1,0 +1,106 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<StudentList /> > conforme au snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="ant-list ant-list-split student-list css-dev-only-do-not-override-yta69t css-var-r0"
+  >
+    <div
+      class="ant-list-header"
+    >
+      <div
+        class="ant-row ant-row-middle css-dev-only-do-not-override-yta69t css-var-r0"
+        style="margin-left: -2px; margin-right: -2px;"
+      >
+        <div
+          class="ant-col ant-col-13 css-dev-only-do-not-override-yta69t css-var-r0"
+          style="padding-left: 2px; padding-right: 2px;"
+        >
+          <span
+            class="ant-typography css-dev-only-do-not-override-yta69t css-var-r0"
+          >
+            <strong>
+              Nom
+            </strong>
+          </span>
+        </div>
+        <div
+          class="ant-col ant-col-5 css-dev-only-do-not-override-yta69t css-var-r0"
+          style="padding-left: 2px; padding-right: 2px;"
+        >
+          <span
+            class="ant-typography css-dev-only-do-not-override-yta69t css-var-r0"
+          >
+            <strong>
+              Arrivée
+            </strong>
+          </span>
+        </div>
+        <div
+          class="ant-col ant-col-6 css-dev-only-do-not-override-yta69t css-var-r0"
+          style="padding-left: 2px; padding-right: 2px;"
+        >
+          <span
+            class="ant-typography css-dev-only-do-not-override-yta69t css-var-r0"
+          >
+            <strong>
+              Statut
+            </strong>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="ant-spin-nested-loading css-dev-only-do-not-override-yta69t css-var-r0"
+    >
+      <div
+        class="ant-spin-container"
+      >
+        <ul
+          class="ant-list-items"
+        >
+          <li
+            class="ant-list-item student-list__item"
+          >
+            <div
+              class="ant-row ant-row-middle css-dev-only-do-not-override-yta69t css-var-r0"
+              style="margin-left: -2px; margin-right: -2px;"
+            >
+              <div
+                class="ant-col ant-col-13 css-dev-only-do-not-override-yta69t css-var-r0"
+                style="padding-left: 2px; padding-right: 2px;"
+              >
+                <span
+                  class="ant-typography css-dev-only-do-not-override-yta69t css-var-r0"
+                >
+                  Mock User
+                </span>
+              </div>
+              <div
+                class="ant-col ant-col-5 css-dev-only-do-not-override-yta69t css-var-r0"
+                style="padding-left: 2px; padding-right: 2px;"
+              >
+                <span
+                  class="ant-typography css-dev-only-do-not-override-yta69t css-var-r0"
+                >
+                  00:02
+                </span>
+              </div>
+              <div
+                class="ant-col ant-col-6 css-dev-only-do-not-override-yta69t css-var-r0"
+                style="padding-left: 2px; padding-right: 2px;"
+              >
+                <span
+                  class="ant-tag ant-tag-success ant-tag-borderless css-dev-only-do-not-override-yta69t css-var-r0"
+                >
+                  Présent
+                </span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

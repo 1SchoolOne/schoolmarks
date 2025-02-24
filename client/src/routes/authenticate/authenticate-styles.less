@@ -1,0 +1,32 @@
+.schoolone-auth-layout {
+	&__hero-panel {
+		box-shadow: 0 0 100px rgba(0, 22, 40, 1) inset;
+
+		&__content {
+			position: relative;
+			z-index: 2;
+		}
+
+		img&__bg {
+			z-index: 1;
+			filter: blur(7px);
+		}
+	}
+
+	&__main-panel {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: var(--ant-padding);
+		background-color: var(--ant-color-bg-layout);
+
+		.ant-card {
+			max-width: 500px;
+			width: 100%;
+
+			.ant-alert {
+				margin-bottom: var(--ant-margin);
+			}
+		}
+	}
+}

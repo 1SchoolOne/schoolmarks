@@ -1,0 +1,23 @@
+.register-attendance {
+	height: inherit;
+	background-color: var(--ant-color-bg-base);
+
+	.attendance-form {
+		h3 {
+			margin: 0;
+		}
+
+		&--closed {
+			h3 {
+				margin-bottom: 0;
+			}
+			.ant-alert {
+				margin-bottom: 12px;
+			}
+		}
+
+		.ant-otp input[type='number'].ant-otp-input {
+			appearance: textfield;
+		}
+	}
+}

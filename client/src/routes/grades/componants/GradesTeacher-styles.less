@@ -1,0 +1,108 @@
+@primary-color: #1890ff;
+@danger-color: #ff4d4f;
+@filter-select-width: 150px;
+@divider-height: 60px;
+@divider-margin: 20px;
+@section-margin: 20px;
+@filter-icon-margin: 8px;
+
+.grades-header {
+	padding: 8px;
+}
+
+.grades-actions {
+	display: flex;
+	justify-content: space-around;
+	margin-bottom: @section-margin;
+
+	&-search {
+		margin-right: 10px;
+	}
+}
+
+.filters-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: @section-margin;
+	margin-bottom: @section-margin;
+}
+
+.filter-group {
+	display: flex;
+	align-items: center;
+
+	&-item {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		&-controls {
+			display: flex;
+			align-items: center;
+		}
+	}
+}
+
+.filter-select {
+	width: @filter-select-width;
+}
+
+.filter-reset-icon {
+	margin-left: @filter-icon-margin;
+	cursor: pointer;
+	transition: color 0.3s;
+
+	&:hover {
+		color: @danger-color;
+	}
+}
+
+.filter-divider {
+	height: @divider-height;
+	margin: 0 @divider-margin;
+}
+
+.filter-reset-all {
+	margin-left: @divider-margin;
+}
+
+.grades-content {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.grades-error {
+	margin: 16px 0;
+}
+
+.grades-table {
+	width: 100%;
+	margin-top: 16px;
+}
+
+.grades-card-grid {
+	width: 100%;
+	margin-top: 16px;
+}
+
+.action-edit {
+	color: @primary-color;
+}
+
+.action-delete {
+	color: @danger-color;
+}
+.filter-reset-all-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-end;
+	height: @divider-height;
+	padding-bottom: 4px;
+
+	.filter-reset-all {
+		margin-left: @divider-margin;
+	}
+}

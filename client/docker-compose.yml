@@ -1,0 +1,19 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      secrets:
+        - env_file
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      - VITE_API_HOST=${VITE_API_HOST}
+      - VITE_CLIENT_HOST=${VITE_CLIENT_HOST}
+    env_file:
+      - .env.production
+
+secrets:
+  env_file:
+    file: ./.env.yarn

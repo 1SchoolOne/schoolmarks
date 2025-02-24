@@ -1,0 +1,61 @@
+.ant-qrcode {
+	margin: 0 auto;
+}
+
+.ant-form {
+	margin-top: var(--ant-margin);
+}
+
+.no-checkin-session-message {
+	height: 100%;
+
+	.ant-typography {
+		// Pour que le texte soit centré visuellement, il faut le décaler vers le haut
+		// de la même hauteur que le header de la modal, -32px donc.
+		margin-top: -32px;
+	}
+}
+
+.totp-container {
+	margin: var(--ant-margin) 0;
+
+	h3.ant-typography {
+		margin: 0;
+	}
+}
+
+.student-list-divider {
+	height: 100%;
+}
+
+.student-list {
+	&__item {
+		> .ant-row {
+			width: 100%;
+		}
+	}
+}
+
+.checkin-modal {
+	height: 100%;
+
+	&__left-panel {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.checkin-session-form {
+		margin-top: auto;
+	}
+}
+
+.checkin-session__modal-title-container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: var(--ant-margin);
+
+	.ant-typography {
+		margin: 0;
+	}
+}

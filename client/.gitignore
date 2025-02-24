@@ -1,0 +1,29 @@
+# Misc
+node_modules
+.DS_Store
+openapi-schema.yml
+TODOS.md
+TODO.md
+todos.md
+todo.md
+
+# IntelliJ
+.idea/**/*
+!.idea/prettier.xml
+
+# Yarn
+.yarn/*
+!.yarn/releases
+
+# Environment variables
+.env*
+!.env.development
+!.env.production
+
+# Tool reports
+eslint_report.json
+.vitest-report
+
+# Build
+build
+*.tsbuildinfo

@@ -1,0 +1,92 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+  "name": "Ubuntu",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "forwardPorts": [8000, 8080],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "njpwerner.autodocstring",
+        "tamasfe.even-better-toml",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "alexcvzz.vscode-sqlite",
+        "ms-vscode.vscode-typescript-next",
+        "esbenp.prettier-vscode",
+        "YoavBls.pretty-ts-errors",
+        "redhat.vscode-yaml",
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
+        "jgclark.vscode-todo-highlight",
+        "cweijan.vscode-database-client2"
+      ],
+      "settings": {
+        "git.autofetch": true,
+        "scm.showActionButton": false,
+        "scm.showInputActionButton": false,
+        "workbench.editor.labelFormat": "short",
+        "terminal.integrated.defaultProfile.macos": "zsh",
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.defaultProfile.windows": "zsh",
+        "ruff.nativeServer": "on",
+        "editor.formatOnSave": true,
+        "editor.tokenColorCustomizations": {
+          "textMateRules": [
+            {
+              "scope": "comment",
+              "settings": { "fontStyle": "italic" }
+            },
+            {
+              "scope": "storage,entity,variable",
+              "settings": { "fontStyle": "" }
+            }
+          ]
+        },
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff"
+        },
+        "[javascript]": {
+          "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+          "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": "always"
+          }
+        },
+        "[typescript]": {
+          "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+          "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": "always"
+          }
+        },
+        "[javascriptreact]": {
+          "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+          "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": "always"
+          }
+        },
+        "[typescriptreact]": {
+          "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+          "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": "always"
+          }
+        },
+        "[json]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[jsonc]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[less]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        }
+      }
+    }
+  }
+}

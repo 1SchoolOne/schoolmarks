@@ -1,0 +1,39 @@
+{
+	"compilerOptions": {
+		"target": "ES2022",
+		"lib": ["ES2023"],
+		"module": "ESNext",
+		"skipLibCheck": true,
+
+		/* Bundler mode */
+		"moduleResolution": "Bundler",
+		"allowImportingTsExtensions": true,
+		"isolatedModules": true,
+		"moduleDetection": "force",
+		"noEmit": true,
+
+		/* Linting */
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedSideEffectImports": true,
+		"noUncheckedIndexedAccess": true,
+
+		/* Path aliases */
+		"paths": {
+			"@components": ["./src/components/index.ts"],
+			"@utils/*": ["./src/utils/*"],
+			"@types": ["./src/types/index.ts"],
+			"@assets/*": ["./src/assets/*"],
+			"@routes/*": ["./src/routes/*"],
+			"@contexts": ["./src/contexts/index.ts"],
+			"@api/*": ["./src/api/*"],
+			"@helpers/*": ["./src/helpers/*"],
+			"@apiSchema/*": ["./src/types/api/*"]
+		},
+
+		"types": ["vitest/globals"]
+	},
+	"include": ["vite.config.ts"]
+}
