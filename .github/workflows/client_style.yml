@@ -1,4 +1,4 @@
-name: Code Style
+name: Client Code Style
 
 permissions:
   pull-requests: write
@@ -23,6 +23,9 @@ jobs:
   format:
     name: Format (Prettier)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
     steps:
       - uses: actions/setup-node@v4
         with:
@@ -30,20 +33,25 @@ jobs:
 
       - name: Code Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Create .env file
         run: |
-          echo GITHUB_PAT=${{ env.GITHUB_PAT }} >> client/.env.yarn
+          echo GITHUB_PAT=${{ env.GITHUB_PAT }} >> .env.yarn
 
       - name: Install dependencies
-        run: cd client && yarn install --immutable
+        run: yarn install --immutable
 
       - name: Check Formatting
-        run: cd client && yarn format
+        run: yarn format
 
   lint:
     name: Lint (ESLint)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
     permissions: write-all
     steps:
       - uses: actions/setup-node@v4
@@ -55,13 +63,13 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo GITHUB_PAT=${{ env.GITHUB_PAT }} >> client/.env.yarn
+          echo GITHUB_PAT=${{ env.GITHUB_PAT }} >> .env.yarn
 
       - name: Install Dependencies
-        run: cd client && yarn install --immutable
+        run: yarn install --immutable
 
       - name: Check Linting
-        run: cd client && yarn run lint:report
+        run: yarn run lint:report
 
       - name: Upload Report Artifact
         if: always()
@@ -75,6 +83,9 @@ jobs:
     # Only run on pull requests, when the lint job has failed
     if: github.event_name == 'pull_request' && failure()
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
     needs: lint
     steps:
       - name: Checkout Code

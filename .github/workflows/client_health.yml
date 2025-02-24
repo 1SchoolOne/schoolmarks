@@ -1,4 +1,4 @@
-name: Health
+name: Client Health
 
 on:
   push:
@@ -20,6 +20,9 @@ jobs:
   audit:
     name: Audit
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
     steps:
       - uses: actions/setup-node@v4
         with:
@@ -30,14 +33,17 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo GITHUB_PAT=${{ env.GITHUB_PAT }} >> client/.env.yarn
+          echo GITHUB_PAT=${{ env.GITHUB_PAT }} >> .env.yarn
 
       - name: NPM Audit
-        run: cd client && yarn npm audit
+        run: yarn npm audit
 
   build:
     name: Build
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
     steps:
       - uses: actions/setup-node@v4
         with:
@@ -48,17 +54,20 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo GITHUB_PAT=${{ env.GITHUB_PAT }} >> client/.env.yarn
+          echo GITHUB_PAT=${{ env.GITHUB_PAT }} >> .env.yarn
 
       - name: Install Dependencies
-        run: cd client && yarn install --immutable
+        run: yarn install --immutable
 
       - name: Build
-        run: cd client && yarn build
+        run: yarn build
 
   tests:
     name: Tests
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
     env:
       CI: true
     steps:
@@ -71,13 +80,13 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo GITHUB_PAT=${{ env.GITHUB_PAT }} >> client/.env.yarn
+          echo GITHUB_PAT=${{ env.GITHUB_PAT }} >> .env.yarn
 
       - name: Install Dependencies
-        run: cd client && yarn install --immutable
+        run: yarn install --immutable
 
       - name: Vitest
-        run: cd client && yarn test
+        run: yarn test
 
       - name: Setup Pages
         if: github.ref == 'refs/heads/develop'
@@ -94,6 +103,9 @@ jobs:
     name: Publish reports
     if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
     needs: tests
     permissions:
       pages: write
