@@ -18,7 +18,6 @@ import { TOTP } from './_components/TOTP/TOTP'
 
 import './AttendanceWithModal-styles.less'
 
-// TODO: show only the table when the session goes from `opened` to `closed`
 export function AttendanceWithModal() {
 	const initialData = useLoaderData() as Awaited<ReturnType<typeof classSessionloader>>
 	const { user } = useContext(IdentityContext)

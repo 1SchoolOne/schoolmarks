@@ -7,13 +7,13 @@ interface TOTPCountdownProps {
 	totpCountdown: number
 }
 
-function TOTP() {
+export function TOTP() {
 	const { totp, totpCountdown } = useController()
 
 	return <TOTPCountdown totp={totp} totpCountdown={totpCountdown} />
 }
 
-function TOTPCountdown(props: TOTPCountdownProps) {
+export function TOTPCountdown(props: TOTPCountdownProps) {
 	const { totp, totpCountdown } = props
 
 	return (
@@ -36,7 +36,3 @@ function TOTPCountdown(props: TOTPCountdownProps) {
 		</Row>
 	)
 }
-
-TOTP.Countdown = TOTPCountdown
-
-export { TOTP }

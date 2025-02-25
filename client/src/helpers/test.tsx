@@ -10,6 +10,7 @@ const testingQueryClient = new QueryClient({
 	defaultOptions: { queries: { staleTime: 0, retry: false } },
 })
 
+// eslint-disable-next-line react-refresh/only-export-components
 function AllProviders({ children }: PropsWithChildren) {
 	const testingRouter = useMemo(
 		() =>

@@ -27,7 +27,10 @@ function defaultOnUploadError(error: Error, setError: React.Dispatch<Error | str
 	}
 }
 
-export function ImportForm<UploadResponse = any>(props: ImportFormProps<UploadResponse>) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function ImportForm<UploadResponse extends Record<string, any>>(
+	props: ImportFormProps<UploadResponse>,
+) {
 	const { onUpload, onUploadError = defaultOnUploadError, onUploadSuccess } = props
 	const [file, setFile] = useState<UploadFile>()
 	const [error, setError] = useState<Error | string>()

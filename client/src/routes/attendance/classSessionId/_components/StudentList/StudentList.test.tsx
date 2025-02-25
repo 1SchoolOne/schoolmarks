@@ -2,11 +2,12 @@ import { screen } from '@testing-library/react'
 
 import { renderWithThemeProvider } from '@helpers/test'
 
-import { StudentList } from './StudentList'
+// import { StudentList } from './StudentList'
 import { provisioning } from './provisioning'
 
 const { present, late, absent, noReadPerms, sessionNotOpened } = provisioning
 
+// TODO: fix tests
 describe.skip('<StudentList />', () => {
 	it('conforme au snapshot', () => {
 		const { asFragment } = renderWithThemeProvider(

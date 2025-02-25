@@ -27,7 +27,7 @@ interface ProfileFormPayload {
 	username?: string
 }
 
-export function getInitialValues(user: { display: string; username: string }): ProfileFormValues {
+function getInitialValues(user: { display: string; username: string }): ProfileFormValues {
 	// Le 'display' est composé du prénom et du nom sous ce format: '<Prénom> <Nom>'.
 	// Si le profile utilisateur n'a pas de Nom/Prénom alors l'API utilise le nom
 	// d'utilisateur comme display.

@@ -8,6 +8,7 @@ import { API_BASE_URL, AXIOS_DEFAULT_CONFIG } from '@api/axios'
 
 import { ImportCSV, ImportCSVError, ImportCSVSuccess, ImportStatus, ImportType } from '../../types'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface ImportListProps<DataType extends Record<string, any>> {
 	importType: ImportType
 	initialData?: ImportCSV<DataType>
