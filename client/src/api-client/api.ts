@@ -25,10 +25,6 @@ import {
 	assertParamExists,
 	createRequestFunction,
 	serializeDataIfNeeded,
-	setApiKeyToObject,
-	setBasicAuthToObject,
-	setBearerAuthToObject,
-	setOAuthToObject,
 	setSearchParams,
 	toPathString,
 } from './common'

@@ -29,7 +29,9 @@ export default defineConfig({
 			'@apiSchema': path.resolve(__dirname, './src/types/api'),
 		},
 	},
-	build: { outDir: 'build' },
+	build: {
+		outDir: 'build',
+	},
 	css: {
 		preprocessorOptions: {
 			less: {
@@ -44,12 +46,16 @@ export default defineConfig({
 		include: ['**/*.{test,spec}.ts(|x)'],
 		setupFiles: ['tests/setup.ts'],
 		reporters: process.env.CI
-			? [[
-        'default',
-        {
-          summary: false,
-        },
-      ], 'html', 'github-actions']
+			? [
+					[
+						'default',
+						{
+							summary: false,
+						},
+					],
+					'html',
+					'github-actions',
+				]
 			: [
 					[
 						'default',
