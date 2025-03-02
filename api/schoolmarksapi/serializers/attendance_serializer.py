@@ -1,20 +1,19 @@
 from rest_framework import serializers
-from schoolmarksapi.models import AttendanceDetail, AttendanceRecord
-from schoolmarksapi.models.user import User
+from schoolmarksapi.models import User, Attendance
 from .user_serializer import UserSerializer
 
 
-class AttendanceRecordSerializer(serializers.ModelSerializer):
+class AttendanceSerializer(serializers.ModelSerializer):
     student_detail = UserSerializer(source="student", read_only=True)
     student = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(), write_only=True
     )
 
     class Meta:
-        model = AttendanceRecord
+        model = Attendance
         fields = [
             "id",
-            "checkin_session",
+            "class_session",
             "student",
             "student_detail",
             "checked_in_at",
@@ -26,19 +25,3 @@ class AttendanceRecordSerializer(serializers.ModelSerializer):
         ret = super().to_representation(instance)
         ret["student"] = ret.pop("student_detail")
         return ret
-
-
-class AttendanceDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AttendanceDetail
-        fields = [
-            "id",
-            "attendance_record",
-            "student",
-            "class_session",
-            "course",
-            "status",
-            "checked_in_at",
-            "minutes_late",
-            "created_at",
-        ]

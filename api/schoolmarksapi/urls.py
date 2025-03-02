@@ -20,17 +20,14 @@ from schoolmarksapi.views.import_view import (
 from .views import (
     ClassViewSet,
     CourseViewSet,
-    CourseEnrollmentViewSet,
     ClassStudentViewSet,
     ClassSessionViewSet,
     CheckinSessionViewSet,
-    AttendanceRecordViewSet,
-    AttendanceDetailViewSet,
-    GradeViewSet,
+    AttendanceViewSet,
+    AssessmentViewSet,
     StudentGradeViewSet,
     UserViewSet,
 )
-from schoolmarksapi import views
 
 # API Documentation configuration
 schema_view = get_schema_view(
@@ -56,18 +53,14 @@ router.register(r"class_students", ClassStudentViewSet)
 router.register(r"class_sessions", ClassSessionViewSet)
 # Course management
 router.register(r"courses", CourseViewSet)
-router.register(r"course_enrollments", CourseEnrollmentViewSet)
 # Attendance management
 router.register(r"checkin_sessions", CheckinSessionViewSet)
-router.register(r"attendance_records", AttendanceRecordViewSet)
-router.register(r"attendance_details", AttendanceDetailViewSet)
+router.register(r"attendances", AttendanceViewSet)
 # Grades management
-router.register(r"grades", GradeViewSet)
+router.register(r"assessments", AssessmentViewSet)
 router.register(r"student_grades", StudentGradeViewSet)
 
 urlpatterns = [
-    # Security
-    path("get-csrf-token/", views.get_csrf_token, name="get-csrf-token"),
     # Admin interface
     path("admin/", admin.site.urls),
     # Authentication

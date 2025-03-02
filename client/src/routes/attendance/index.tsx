@@ -1,9 +1,10 @@
 import { QueryClient } from '@tanstack/react-query'
+import dayjs from 'dayjs'
 import { Outlet } from 'react-router-dom'
 
-import { getClassSessionQueryOptions, getClassSessions } from '@api/classSessions'
+import { classSessionsApi } from '@api/axios'
 
-import { ProtectedRoute } from '@components'
+import { Calendar, ProtectedRoute } from '@components'
 
 import { Route } from '@types'
 
@@ -13,7 +14,25 @@ import { AttendanceWithModal } from './classSessionId/AttendanceWithModal'
 export function getAttendanceRoute(queryClient: QueryClient): Route {
 	return {
 		path: 'attendance',
-		element: <Outlet />,
+		element: (
+			<ProtectedRoute
+				restrictedTo={['teacher']}
+				redirectTo={(role) => {
+					switch (role) {
+						case 'student':
+							return '/app/calendar'
+						case 'teacher':
+							return '/app/attendance'
+						case 'admin':
+							return '/app/admin/users'
+					}
+				}}
+			>
+				<Calendar.Provider>
+					<Outlet />
+				</Calendar.Provider>
+			</ProtectedRoute>
+		),
 		handle: {
 			crumb: {
 				label: 'Assiduité',
@@ -28,11 +47,7 @@ export function getAttendanceRoute(queryClient: QueryClient): Route {
 			},
 			{
 				path: 'class-session/:classSessionId',
-				element: (
-					<ProtectedRoute restrictedTo={['teacher']} redirectTo="/app/attendance">
-						<AttendanceWithModal />
-					</ProtectedRoute>
-				),
+				element: <AttendanceWithModal />,
 				loader: ({ params }) =>
 					classSessionloader({ queryClient, classSessionId: params.classSessionId }),
 			},
@@ -41,9 +56,15 @@ export function getAttendanceRoute(queryClient: QueryClient): Route {
 }
 
 export async function attendanceLoader(queryClient: QueryClient) {
+	const startDate = dayjs().startOf('week').format('YYYY-MM-DD')
+	const endDate = dayjs().endOf('week').format('YYYY-MM-DD')
+
 	return queryClient.fetchQuery({
-		queryKey: ['classSessions'],
-		queryFn: () => getClassSessions(),
+		queryKey: ['classSessions', { start: startDate, end: endDate }],
+		queryFn: () =>
+			classSessionsApi
+				.classSessionsList(undefined, undefined, endDate, startDate)
+				.then(({ data }) => data),
 	})
 }
 
@@ -53,7 +74,8 @@ export async function classSessionloader(params: {
 }) {
 	const { queryClient, classSessionId } = params
 
-	const classSessionQueryOptions = getClassSessionQueryOptions(classSessionId)
-
-	return queryClient.fetchQuery(classSessionQueryOptions)
+	return queryClient.fetchQuery({
+		queryKey: ['classSession', classSessionId],
+		queryFn: () => classSessionsApi.classSessionsRetrieve(classSessionId!).then(({ data }) => data),
+	})
 }

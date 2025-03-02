@@ -11,7 +11,8 @@
 	"importOrder": [
 		"^@helpers/(.*)$",
 		"^@routes/(.*)$",
-		"^@api(|Schema)/(.*)$",
+		"^@api/(.*)$",
+		"^@apiClient",
 		"^@components",
 		"^@contexts",
 		"^@utils/(.*)$",

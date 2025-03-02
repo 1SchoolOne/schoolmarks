@@ -1,11 +1,13 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import dayjs from 'dayjs'
+import 'dayjs/locale/fr'
 import { Navigate, Outlet, RouterProvider, createBrowserRouter, redirect } from 'react-router-dom'
 
 import { getAdminRoute } from '@routes/admin'
 import { getAttendanceRoute } from '@routes/attendance'
 import { authenticateRoute } from '@routes/authenticate'
-import { calendarRoute } from '@routes/calendar'
-import { gradesRoute } from '@routes/grades'
+import { getCalendarRoute } from '@routes/calendar'
+import { getGradesRoute } from '@routes/grades'
 import { getRegisterAttendanceRoute } from '@routes/register-attendance'
 
 import { getSession } from '@api/auth'
@@ -15,6 +17,8 @@ import { MainLayout, ProtectedRoute } from '@components'
 import { IdentityProvider } from '@contexts'
 
 import '@1schoolone/ui/dist/ui.css'
+
+dayjs.locale('fr')
 
 /**
  * Les requêtes mises en cache sont valides pendant 2 minutes. Après ce délai
@@ -64,8 +68,8 @@ const routes = createBrowserRouter([
 				children: [
 					{ path: '/app', element: <Navigate to="/app/attendance" replace /> },
 					getAttendanceRoute(queryClient),
-					gradesRoute,
-					calendarRoute,
+					getGradesRoute(queryClient),
+					getCalendarRoute(queryClient),
 					getAdminRoute(queryClient),
 				],
 			},

@@ -1,4 +1,7 @@
 from rest_framework import serializers
+from drf_spectacular.utils import (
+    extend_schema_field,
+)
 
 
 STATUS_CHOICES = ("processing", "completed", "failed")
@@ -6,6 +9,25 @@ STATUS_CHOICES = ("processing", "completed", "failed")
 
 class ImportSerializer(serializers.Serializer):
     file = serializers.FileField()
+
+
+@extend_schema_field({"type": "array", "items": {"type": "object"}})
+class JSONArrayField(serializers.JSONField):
+    pass
+
+
+class ImportResultsField(serializers.JSONField):
+    class Meta:
+        swagger_schema_fields = {
+            "type": "array",
+            "items": {
+                "oneOf": [
+                    {"$ref": "#/components/schemas/UserImportStatus"},
+                    {"$ref": "#/components/schemas/ClassImportStatus"},
+                    {"$ref": "#/components/schemas/CourseImportStatus"},
+                ]
+            },
+        }
 
 
 class ImportStatusSerializer(serializers.Serializer):
@@ -16,7 +38,9 @@ class ImportStatusSerializer(serializers.Serializer):
     status = serializers.ChoiceField(choices=STATUS_CHOICES)
     progress = serializers.IntegerField()
     imported_by = serializers.CharField()
-    results = serializers.JSONField(required=False)
+
+    results = JSONArrayField()
+
     error = serializers.CharField(required=False, allow_null=True)
     warnings = serializers.ListField(
         child=serializers.CharField(), required=False, allow_null=True

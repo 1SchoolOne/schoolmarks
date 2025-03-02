@@ -1,27 +1,28 @@
 import { useQuery } from '@tanstack/react-query'
 import { List, Tooltip } from 'antd'
-import axios from 'axios'
 import { CircleCheckIcon, CircleDashedIcon, CircleXIcon } from 'lucide-react'
 import { ReactNode } from 'react'
 
-import { API_BASE_URL, AXIOS_DEFAULT_CONFIG } from '@api/axios'
+import { importApi } from '@api/axios'
 
-import { ImportCSV, ImportCSVError, ImportCSVSuccess, ImportStatus, ImportType } from '../../types'
+import { ImportStatus } from '@apiClient'
+
+import { ImportCSVError, ImportCSVSuccess, ImportType } from '../../types'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface ImportListProps<DataType extends Record<string, any>> {
 	importType: ImportType
-	initialData?: ImportCSV<DataType>
+	initialData?: ImportStatus
 	renderItem: (importItem: ImportCSVSuccess<DataType> | ImportCSVError) => ReactNode
 }
 
 interface ImportListItemProps {
-	status: ImportStatus
+	status: ImportStatus['status']
 	title: ReactNode
 	description: ReactNode
 }
 
-function getListItemIcon(status: ImportStatus) {
+function getListItemIcon(status: ImportStatus['status']) {
 	switch (status) {
 		case 'completed':
 			return (
@@ -49,13 +50,15 @@ function ImportList<DataType extends Record<string, any>>(props: ImportListProps
 
 	const { data: imports, isPending } = useQuery({
 		queryKey: [importType],
-		queryFn: async () => {
-			const { data } = await axios.get<ImportCSV<DataType>>(
-				`${API_BASE_URL}/import/${importType}`,
-				AXIOS_DEFAULT_CONFIG,
-			)
-
-			return data
+		queryFn: () => {
+			switch (importType) {
+				case 'users':
+					return importApi.importUsersRetrieve().then(({ data }) => data)
+				case 'classes':
+					return importApi.importClassesRetrieve().then(({ data }) => data)
+				case 'courses':
+					return importApi.importCoursesRetrieve().then(({ data }) => data)
+			}
 		},
 		initialData,
 	})

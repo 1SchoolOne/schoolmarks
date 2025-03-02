@@ -1,17 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
 import { Space, Table, Tag, Typography } from 'antd'
-import axios from 'axios'
 import dayjs from 'dayjs'
 import { CircleCheckBigIcon, CircleOffIcon, ClockAlertIcon } from 'lucide-react'
 
-import { AXIOS_DEFAULT_CONFIG } from '@api/axios'
-
-import { Student } from './StudentList-data'
+import { attendanceApi } from '@api/axios'
 
 import './StudentList-styles.less'
 
 interface StudentListProps {
-	checkinSessionId: string | undefined
+	classSessionId: string | undefined
 	isSessionClosed: boolean
 }
 
@@ -38,15 +35,14 @@ function renderTitle(attendances: readonly Attendance[]) {
 }
 
 export function StudentList(props: StudentListProps) {
-	const { checkinSessionId, isSessionClosed } = props
+	const { classSessionId, isSessionClosed } = props
 
 	const { data: studentAttendances, isPending } = useQuery({
-		queryKey: ['students', checkinSessionId],
+		queryKey: ['students', classSessionId],
 		queryFn: async () => {
-			const { data } = await axios.get<Student[]>(
-				`/attendance_records/?checkin_session_id=${checkinSessionId}`,
-				AXIOS_DEFAULT_CONFIG,
-			)
+			const { data } = await attendanceApi.attendancesList({
+				params: { class_session_id: classSessionId },
+			})
 
 			const finalData: {
 				fullname: string
@@ -61,7 +57,7 @@ export function StudentList(props: StudentListProps) {
 			return finalData
 		},
 		refetchInterval: !isSessionClosed ? 2000 : undefined,
-		enabled: checkinSessionId !== undefined,
+		enabled: classSessionId !== undefined,
 		initialData: [],
 	})
 

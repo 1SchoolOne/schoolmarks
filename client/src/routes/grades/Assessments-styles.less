@@ -1,0 +1,115 @@
+.assessments {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ant-margin);
+	height: 100%;
+
+	&__filters {
+		display: flex;
+		gap: var(--ant-margin-sm);
+
+		&__item {
+			display: flex;
+			flex-direction: column;
+			gap: var(--ant-margin-xxs);
+			max-width: 150px;
+			width: 100%;
+
+			&.search {
+				max-width: 250px;
+			}
+		}
+
+		.ant-divider {
+			height: auto;
+		}
+	}
+
+	.ant-tabs {
+		overflow: hidden;
+
+		&-content-holder {
+			overflow: hidden;
+			overflow-y: auto;
+
+			.ant-tabs-content {
+				height: 100%;
+
+				.ant-tabs-tabpane.ant-tabs-tabpane-active {
+					height: 100%;
+				}
+			}
+		}
+
+		&-tab-btn {
+			display: flex;
+		}
+
+		&-tab-icon {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: fit-content;
+		}
+	}
+
+	&__cards {
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 450px));
+		gap: var(--ant-margin);
+
+		&__item {
+			&__title {
+				.ant-typography {
+					margin: 0;
+				}
+			}
+
+			&__statistics {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+			}
+		}
+	}
+
+	&__table {
+		height: 100%;
+
+		// Handles table overflow
+		.ant-spin-nested-loading {
+			height: 100%;
+
+			.ant-spin-container {
+				height: 100%;
+				display: flex;
+				flex-flow: column nowrap;
+
+				.ant-table {
+					flex: auto;
+					overflow: hidden;
+
+					.ant-table-container {
+						height: 100%;
+						display: flex;
+						flex-flow: column nowrap;
+
+						.ant-table-header {
+							flex: none;
+						}
+
+						.ant-table-body {
+							flex: auto;
+							overflow: auto;
+							scrollbar-width: none;
+						}
+					}
+
+					.ant-table-pagination {
+						flex: none;
+					}
+				}
+			}
+		}
+	}
+}

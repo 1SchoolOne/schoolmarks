@@ -2,7 +2,7 @@ import { UseQueryOptions } from '@tanstack/react-query'
 import { AnyObject } from 'antd/es/_util/type'
 import axios from 'axios'
 
-import { API_BASE_URL, AXIOS_DEFAULT_CONFIG } from './axios'
+import { AXIOS_DEFAULT_CONFIG, usersApi } from './axios'
 
 export interface Credentials {
 	email: string
@@ -53,17 +53,15 @@ export async function changePassword(values: {
 	newPassword: string
 	userId: number
 }) {
+	const { userId, currentPassword, newPassword } = values
+
 	await axios.post(
 		`${ACCOUNT_API_URL}/password/change`,
-		{ current_password: values.currentPassword, new_password: values.newPassword },
+		{ current_password: currentPassword, new_password: newPassword },
 		AXIOS_DEFAULT_CONFIG,
 	)
 
-	await axios.patch(
-		`${API_BASE_URL}/users/${values.userId}/`,
-		{ has_changed_password: true },
-		AXIOS_DEFAULT_CONFIG,
-	)
+	await usersApi.usersPartialUpdate(userId, { has_changed_password: true })
 }
 
 /**

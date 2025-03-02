@@ -1,10 +1,9 @@
 import { Col, Row, Space, Typography } from 'antd'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-import { API_BASE_URL, AXIOS_DEFAULT_CONFIG } from '@api/axios'
+import { importApi } from '@api/axios'
 
-import { ImportForm, ProcessingStatus } from '../_components/ImportForm/ImportForm'
+import { ImportForm } from '../_components/ImportForm/ImportForm'
 
 export function ImportUsers() {
 	const navigate = useNavigate()
@@ -19,19 +18,7 @@ export function ImportUsers() {
 				<Col span={24}>
 					<ImportForm
 						onUpload={async (file) => {
-							const fileBuffer = await file.originFileObj?.arrayBuffer()
-							if (!fileBuffer) throw new Error('fileBuffer is undefined')
-
-							const blob = new Blob([fileBuffer], { type: 'text/csv' })
-							const formData = new FormData()
-
-							formData.append('file', blob)
-
-							return axios.post<{ import_id: string; status: ProcessingStatus }>(
-								`${API_BASE_URL}/import/users/`,
-								formData,
-								AXIOS_DEFAULT_CONFIG,
-							)
+							return importApi.importUsersCreate(file.originFileObj)
 						}}
 						onUploadSuccess={({ data }) => {
 							navigate(`/app/admin/import/users/view/${data.import_id}`)

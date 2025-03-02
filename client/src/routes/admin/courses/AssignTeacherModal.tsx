@@ -1,9 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Form, Modal, Select } from 'antd'
-import axios from 'axios'
 
-import { API_BASE_URL, AXIOS_DEFAULT_CONFIG } from '@api/axios'
-import { getUsers } from '@api/users'
+import { coursesApi, usersApi } from '@api/axios'
 
 interface AssignTeacherModalProps {
 	courseId: string
@@ -29,16 +27,12 @@ export function AssignTeacherModal(props: AssignTeacherModalProps) {
 
 	const { data: teachers } = useQuery({
 		queryKey: ['users', { role: 'teacher' }],
-		queryFn: () => getUsers({ role: 'teacher' }),
+		queryFn: () => usersApi.usersList({ params: { role: 'teacher' } }).then(({ data }) => data),
 	})
 
 	const { mutate: assignTeacher, isPending } = useMutation({
 		mutationFn: (professorId: string) =>
-			axios.patch(
-				`${API_BASE_URL}/courses/${courseId}/`,
-				{ professor_id: professorId },
-				AXIOS_DEFAULT_CONFIG,
-			),
+			coursesApi.coursesPartialUpdate(courseId, { professor_id: Number(professorId) }),
 		onSuccess,
 		onError,
 	})

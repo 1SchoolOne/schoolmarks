@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { App, Form, Input, Modal, Select } from 'antd'
-import axios from 'axios'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 
-import { API_BASE_URL, AXIOS_DEFAULT_CONFIG } from '@api/axios'
-import { Course } from '@apiSchema/courses'
+import { coursesApi } from '@api/axios'
+
+import { Course } from '@apiClient'
 
 import { editCourseLoader } from '..'
 
@@ -31,13 +31,9 @@ export function EditCourseModal() {
 
 	const { mutate: updateCourse, isPending } = useMutation({
 		mutationFn: (values: FormValues) =>
-			axios.put(
-				`${API_BASE_URL}/courses/${course.id}/`,
-				{ ...values, professor_id: values.professor_id ? values.professor_id : null },
-				AXIOS_DEFAULT_CONFIG,
-			),
+			coursesApi.coursesPartialUpdate(course.id, values).then(({ data }) => data),
 		onSuccess: () => {
-			queryClient.refetchQueries({
+			queryClient.invalidateQueries({
 				queryKey: ['courses'],
 			})
 			notification.success({ message: 'Cours modifié avec succès' })

@@ -18,7 +18,7 @@ export function formatTimeFrame(startTime: string | undefined, endTime: string |
 	return (
 		<Flex align="center" gap={6}>
 			<span>{formattedStartTime}</span>
-			<MoveRightIcon size={16} color="var(--ant-color-text-tertiary)" />
+			<MoveRightIcon size={16} />
 			<span>{formattedEndTime}</span>
 		</Flex>
 	)

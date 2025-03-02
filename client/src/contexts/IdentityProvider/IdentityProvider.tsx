@@ -2,7 +2,7 @@ import { PropsWithChildren } from '@1schoolone/ui'
 import { UseMutateFunction, useMutation, useQuery } from '@tanstack/react-query'
 import { AxiosResponse, isAxiosError } from 'axios'
 import { createContext, useEffect, useMemo, useState } from 'react'
-import { useLoaderData, useLocation, useNavigate } from 'react-router-dom'
+import { NavigateFunction, useLoaderData, useLocation, useNavigate } from 'react-router-dom'
 
 import {
 	Credentials,
@@ -66,11 +66,12 @@ export function IdentityProvider({ children }: PropsWithChildren) {
 	const { mutate: login, isPending: isLoginPending } = useMutation({
 		mutationFn: loginFn,
 		onSuccess: ({ data }) => {
-			if ('user' in data) {
+			if (data?.user) {
 				setLoginError(undefined)
 				setStatus('authenticated')
 				setUser(data.user)
-				navigate('/app/attendance', { replace: true })
+
+				redirectToApp({ navigate, userRole: data.user.role })
 			}
 		},
 		onError: (error) => {
@@ -135,7 +136,7 @@ export function IdentityProvider({ children }: PropsWithChildren) {
 		const isRegisteringAttendance = pathname === 'register-attendance'
 
 		if (!isOnTheApp && !isRegisteringAttendance && status === 'authenticated') {
-			navigate('/app', { replace: true })
+			redirectToApp({ navigate, userRole: user!.role })
 		} else if (status === null) {
 			navigate('/authenticate', { replace: true })
 		}
@@ -158,4 +159,19 @@ export function IdentityProvider({ children }: PropsWithChildren) {
 			{status === undefined ? <LoadingScreen /> : children}
 		</IdentityContext.Provider>
 	)
+}
+
+function redirectToApp(params: { navigate: NavigateFunction; userRole: string }) {
+	const { navigate, userRole } = params
+
+	switch (userRole) {
+		case 'admin':
+			navigate('/app/admin', { replace: true })
+			break
+		case 'teacher':
+			navigate('/app/attendance', { replace: true })
+			break
+		default:
+			navigate('/app/calendar', { replace: true })
+	}
 }

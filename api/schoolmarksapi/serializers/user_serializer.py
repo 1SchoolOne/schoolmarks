@@ -5,9 +5,6 @@ from schoolmarksapi.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     role = serializers.SerializerMethodField(read_only=True)
-    user_role = serializers.ChoiceField(
-        choices=["student", "teacher", "admin"], required=True, write_only=True
-    )
 
     def get_role(self, obj) -> UserRole:
         return get_user_role(obj)
@@ -16,6 +13,26 @@ class UserSerializer(serializers.ModelSerializer):
         ret = super().to_representation(instance)
         ret["role"] = self.get_role(instance)
         return ret
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "birthday",
+            "phone_number",
+            "has_changed_password",
+            "role",
+        ]
+
+
+class UserInputSerializer(serializers.ModelSerializer):
+    user_role = serializers.ChoiceField(
+        choices=["student", "teacher", "admin"], required=True, write_only=True
+    )
 
     def create(self, validated_data):
         # Pop user_role before creating the user
@@ -64,7 +81,6 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "id",
             "username",
             "first_name",
             "last_name",
@@ -72,6 +88,5 @@ class UserSerializer(serializers.ModelSerializer):
             "birthday",
             "phone_number",
             "has_changed_password",
-            "role",
             "user_role",
         ]

@@ -4,8 +4,7 @@ import dayjs from 'dayjs'
 import { useContext } from 'react'
 import { useLoaderData, useParams } from 'react-router-dom'
 
-import { createCheckinSession } from '@api/checkinSessions'
-import { getClassSessionQueryOptions } from '@api/classSessions'
+import { checkinSessionsApi, classSessionsApi } from '@api/axios'
 
 import { IdentityContext } from '@contexts'
 
@@ -25,12 +24,12 @@ export function CheckinSessionForm() {
 	const queryClient = useQueryClient()
 	const params = useParams()
 
-	const classSessionQueryOptions = getClassSessionQueryOptions(params.classSessionId)
-
 	const { data: classSession } = useQuery({
-		...classSessionQueryOptions,
+		queryKey: ['classSession', params.classSessionId],
+		queryFn: () =>
+			classSessionsApi.classSessionsRetrieve(params.classSessionId!).then(({ data }) => data),
 		initialData,
-		enabled: typeof params.classSessionId === 'string',
+		enabled: !!params.classSessionId,
 	})
 
 	const { mutate: submitCheckinSession } = useMutation({
@@ -39,13 +38,15 @@ export function CheckinSessionForm() {
 				throw Error("Impossible de lancer l'appel")
 			}
 
-			return createCheckinSession({
-				class_session: String(classSession.id),
-				started_at: values.startedAt,
-				closed_at: values.closedAt,
-				created_by: user!.id,
-				status: 'active',
-			})
+			return checkinSessionsApi
+				.checkinSessionsCreate({
+					class_session: String(classSession.id),
+					started_at: values.startedAt,
+					closed_at: values.closedAt,
+					created_by: user!.id,
+					status: 'active',
+				})
+				.then(({ data }) => data)
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['classSession', params.classSessionId] })
@@ -55,7 +56,6 @@ export function CheckinSessionForm() {
 	})
 
 	if (classSession.checkin_session) {
-		// TODO: rethink the display of these datas
 		return (
 			<Space size="large">
 				<Statistic

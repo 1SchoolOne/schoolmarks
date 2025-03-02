@@ -1,0 +1,40 @@
+.assessment-form {
+	&.h-stack {
+		.form-content {
+			display: grid;
+			grid-template-columns: minmax(300px, 400px) auto;
+			column-gap: var(--ant-margin);
+
+			.form-section:first-of-type {
+				.ant-row > .ant-col:last-of-type {
+					.ant-form-item {
+						margin: 0;
+					}
+				}
+			}
+
+			.form-section:last-of-type {
+				overflow: hidden;
+			}
+		}
+
+		.form-footer {
+			margin-top: var(--ant-margin);
+		}
+	}
+
+	&.v-stack {
+		display: flex;
+		flex-direction: column;
+		gap: var(--ant-margin);
+	}
+
+	.form-footer {
+		display: flex;
+		gap: var(--ant-margin);
+	}
+
+	.student-list-item {
+		margin: 0;
+	}
+}

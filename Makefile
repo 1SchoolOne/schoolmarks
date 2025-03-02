@@ -9,7 +9,7 @@ YELLOW := $(shell printf "\033[33m")
 RED := $(shell printf "\033[31m")
 RESET := $(shell printf "\033[0m")
 
-.PHONY: setup install-api install-client install-hooks clean-hooks generate-api-types dev
+.PHONY: setup install-api install-client install-hooks clean-hooks generate-api-types dev commit clean-api
 
 # Setup the project
 setup: install-api install-client install-hooks
@@ -58,6 +58,10 @@ dev:
 
 commit:
 	uvx --from commitizen cz commit
+
+clean-api:
+	./scripts/clean-api-caches.sh
+
 
 # Show help message
 help:

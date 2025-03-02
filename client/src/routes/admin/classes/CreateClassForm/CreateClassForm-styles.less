@@ -1,0 +1,116 @@
+.create-class {
+	max-width: 1200px;
+	// max-height: 650px;
+	// height: 100%;
+	// margin: 0 auto;
+
+	&:has(.results-step) {
+		height: auto;
+	}
+
+	.ant-card-body {
+		height: 100%;
+
+		display: grid;
+		// Le premier 'min-content' correspond au :before du ant-card-body.
+		// Si jamais il y a des problèmes d'affichage dans le formulaire,
+		// il se peut que ça vienne de là.
+		grid-template-rows: min-content min-content 1fr;
+
+		&:has(.results-step) {
+			grid-template-rows: min-content 1fr min-content;
+		}
+	}
+
+	.create-class__form.ant-form {
+		height: 100%;
+		margin-top: 0;
+
+		display: flex;
+		flex-direction: column;
+
+		.ant-form-item {
+			margin: 0;
+		}
+
+		.create-class__form__footer {
+			display: flex;
+			gap: var(--ant-margin-sm);
+
+			button:first-child {
+				margin-left: auto;
+			}
+		}
+	}
+
+	.students-step,
+	.courses-step {
+		display: grid;
+		grid-template-rows: min-content 1fr;
+		row-gap: var(--ant-margin);
+		justify-content: center;
+
+		.ant-typography {
+			width: fit-content;
+		}
+	}
+
+	.summary-step {
+		&__students ul,
+		&__courses ul {
+			margin: 0;
+			padding-left: var(--ant-margin-lg);
+		}
+	}
+
+	.results-step {
+		height: 100%;
+		display: grid;
+		grid-template-rows: min-content 1fr;
+		row-gap: var(--ant-margin-xl);
+
+		.results-step__title {
+			display: flex;
+			flex-direction: column;
+			gap: var(--ant-margin-xs);
+
+			.ant-typography {
+				margin: 0;
+			}
+		}
+
+		.transfer-results {
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			gap: var(--ant-margin);
+
+			&:has(> &__alert:only-child) {
+				justify-content: unset;
+			}
+
+			&__alert {
+				height: fit-content;
+
+				.ant-alert-content {
+					max-height: 200px;
+					height: auto;
+
+					.ant-alert-description {
+						// This calculation is arbitrary. If there are any overflow issues
+						// on the results alerts, it might come from here.
+						height: calc(100% - 25.15px - 8px);
+						overflow: hidden;
+						overflow-y: auto;
+					}
+				}
+			}
+		}
+	}
+}
+
+.transfer-enrollment-modal {
+	.ant-typography {
+		margin: 0;
+	}
+}

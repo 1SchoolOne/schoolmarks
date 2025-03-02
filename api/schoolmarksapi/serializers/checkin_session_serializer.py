@@ -12,5 +12,16 @@ class CheckinSessionSerializer(serializers.ModelSerializer):
             "closed_at",
             "created_by",
             "status",
-            "secret",
+        ]
+
+
+class CheckinSessionInputSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CheckinSession
+        fields = [
+            "class_session",
+            "started_at",
+            "closed_at",
+            "created_by",
+            "status",
         ]

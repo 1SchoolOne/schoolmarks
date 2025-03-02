@@ -8,7 +8,6 @@ import {
 	ComponentIcon,
 	FileSpreadsheetIcon,
 	ScrollText,
-	SettingsIcon,
 	UsersIcon,
 } from 'lucide-react'
 import { useContext, useState } from 'react'
@@ -51,31 +50,24 @@ function getMenuItems(userRole: string): ItemType[] {
 		case 'admin':
 			return [
 				{
-					key: 'admin',
-					label: 'Administration',
-					icon: <SettingsIcon size={16} />,
-					children: [
-						{
-							key: 'admin-users',
-							label: <Link to="/app/admin/users">Utilisateurs</Link>,
-							icon: <UsersIcon size={16} />,
-						},
-						{
-							key: 'admin-classes',
-							label: <Link to="/app/admin/classes">Classes</Link>,
-							icon: <ComponentIcon size={16} />,
-						},
-						{
-							key: 'admin-courses',
-							label: <Link to="/app/admin/courses">Cours</Link>,
-							icon: <BookMarkedIcon size={16} />,
-						},
-						{
-							key: 'admin-import',
-							label: <Link to="/app/admin/import">Import</Link>,
-							icon: <FileSpreadsheetIcon size={16} />,
-						},
-					],
+					key: 'admin-users',
+					label: <Link to="/app/admin/users">Utilisateurs</Link>,
+					icon: <UsersIcon size={16} />,
+				},
+				{
+					key: 'admin-classes',
+					label: <Link to="/app/admin/classes">Classes</Link>,
+					icon: <ComponentIcon size={16} />,
+				},
+				{
+					key: 'admin-courses',
+					label: <Link to="/app/admin/courses">Cours</Link>,
+					icon: <BookMarkedIcon size={16} />,
+				},
+				{
+					key: 'admin-import',
+					label: <Link to="/app/admin/import">Import</Link>,
+					icon: <FileSpreadsheetIcon size={16} />,
 				},
 			]
 
@@ -96,14 +88,14 @@ function getMenuItems(userRole: string): ItemType[] {
 		case 'student':
 			return [
 				{
-					key: 'grades',
-					label: <Link to="/app/grades">Notes</Link>,
-					icon: <ScrollText size={16} />,
-				},
-				{
 					key: 'calendar',
 					label: <Link to="/app/calendar">Calendrier</Link>,
 					icon: <CalendarDays size={16} />,
+				},
+				{
+					key: 'grades',
+					label: <Link to="/app/grades">Notes</Link>,
+					icon: <ScrollText size={16} />,
 				},
 			]
 

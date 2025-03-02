@@ -14,7 +14,7 @@ interface SetPasswordModalProps {
 export function SetPasswordModal(props: SetPasswordModalProps) {
 	const { isOpen, setIsOpen } = props
 
-	const { user } = useContext(IdentityContext)
+	const { user, logout } = useContext(IdentityContext)
 	const [formError, setFormError] = useState<unknown>()
 	const [formInstance] = Form.useForm()
 	const queryClient = useQueryClient()
@@ -48,10 +48,12 @@ export function SetPasswordModal(props: SetPasswordModalProps) {
 			closable={false}
 			centered
 			destroyOnClose
-			footer={(_, { OkBtn }) => <OkBtn />}
+			onCancel={() => logout()}
+			cancelText="Retour à la page de connexion"
 			onOk={() => {
 				formInstance.submit()
 			}}
+			okText="Confirmer"
 			confirmLoading={isUpdatingPassword}
 		>
 			<Typography.Text type="secondary">
@@ -69,7 +71,7 @@ export function SetPasswordModal(props: SetPasswordModalProps) {
 				onFinish={updatePassword}
 			>
 				<Form.Item name="currentPassword" label="Mot de passe actuel" rules={[{ required: true }]}>
-					<Input.Password />
+					<Input.Password onPressEnter={() => formInstance.submit()} />
 				</Form.Item>
 				<Form.Item
 					name="newPassword"
@@ -83,8 +85,6 @@ export function SetPasswordModal(props: SetPasswordModalProps) {
 
 								const hasAtLeastOneNumber = numberRegex.test(value)
 								const hasAtLeastOneSpCharacter = specialRegex.test(value)
-
-								console.log({ hasAtLeastOneNumber, hasAtLeastOneSpCharacter })
 
 								if (value.length < 8) {
 									return Promise.reject('Votre mot de passe doit contenir au moins 8 caractères.')
@@ -105,7 +105,7 @@ export function SetPasswordModal(props: SetPasswordModalProps) {
 						}),
 					]}
 				>
-					<Input.Password />
+					<Input.Password onPressEnter={() => formInstance.submit()} />
 				</Form.Item>
 			</Form>
 		</Modal>

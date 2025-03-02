@@ -1,10 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { App, Col, Form, Input, Modal, Row, Select } from 'antd'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-import { AXIOS_DEFAULT_CONFIG } from '@api/axios'
-import { PostUserResponse } from '@apiSchema/users'
+import { usersApi } from '@api/axios'
 
 interface FormValues {
 	first_name: string
@@ -21,11 +19,10 @@ export function CreateUserModal() {
 
 	const { mutate: createUser } = useMutation({
 		mutationFn: (values: FormValues) =>
-			axios.post<PostUserResponse>(
-				'/users/',
-				{ ...values, username: `${values.first_name}.${values.last_name}`.toLocaleLowerCase() },
-				AXIOS_DEFAULT_CONFIG,
-			),
+			usersApi.usersCreate({
+				...values,
+				username: `${values.first_name}.${values.last_name}`.toLocaleLowerCase(),
+			}),
 		onSuccess: () => {
 			queryClient.refetchQueries({ queryKey: ['users'] })
 			notification.success({ message: 'Utilisateur créé avec succès.' })

@@ -1,17 +1,16 @@
 from rest_framework import serializers
 from schoolmarksapi.models import ClassSession
-from schoolmarksapi.serializers import CheckinSessionSerializer, CourseSerializer
+from schoolmarksapi.serializers.class_serializer import ClassSerializer
+from schoolmarksapi.serializers.course_serializer import CourseSerializer
+from schoolmarksapi.serializers.checkin_session_serializer import (
+    CheckinSessionSerializer,
+)
 from drf_spectacular.utils import extend_schema_field
 
 
 class ClassSessionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ClassSession
-        fields = ["id", "course", "date", "start_time", "end_time", "room", "status"]
-
-
-class ClassSessionDetailSerializer(serializers.ModelSerializer):
     course = CourseSerializer(read_only=True)
+    class_group = ClassSerializer(read_only=True)
     checkin_session = serializers.SerializerMethodField()
 
     class Meta:
@@ -19,11 +18,11 @@ class ClassSessionDetailSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "course",
+            "class_group",
             "date",
             "start_time",
             "end_time",
             "room",
-            "status",
             "checkin_session",
         ]
 
@@ -33,3 +32,12 @@ class ClassSessionDetailSerializer(serializers.ModelSerializer):
         if checkin_session:
             return CheckinSessionSerializer(checkin_session).data
         return None
+
+
+class ClassSessionInputSerializer(serializers.ModelSerializer):
+    course_id = serializers.UUIDField(write_only=True)
+    class_id = serializers.UUIDField(write_only=True)
+
+    class Meta:
+        model = ClassSession
+        fields = ["course_id", "class_id", "date", "start_time", "end_time", "room"]

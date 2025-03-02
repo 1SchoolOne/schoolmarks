@@ -9,8 +9,6 @@ export function getCurrentTimePosition(
 	const currentHour = now.getHours()
 	const currentMinutes = now.getMinutes()
 
-	console.log({ now, currentHour, currentMinutes })
-
 	if (currentHour < startHour || currentHour >= endHour + 1) return -1
 
 	// Convertit l'écart de temps en minutes entre l'heure actuelle et le début de la journée

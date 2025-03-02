@@ -4,12 +4,12 @@ from django.db.models.signals import post_migrate
 from django.core.management import call_command
 
 
-def load_initial_data(sender, **kwargs):
-    if sender.name == "schoolmarksapi":
-        call_command("loaddata", "initial_data")
+# def load_initial_data(sender, **kwargs):
+#     if sender.name == "schoolmarksapi":
+#         call_command("loaddata", "initial_data")
 
 
-post_migrate.connect(load_initial_data)
+# post_migrate.connect(load_initial_data)
 
 DEBUG = True
 

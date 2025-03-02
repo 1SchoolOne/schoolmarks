@@ -23,6 +23,10 @@ interface CourseColorVars {
 	background: string
 	/** Darker shade */
 	border: string
+	/** Lighter shade on hover */
+	backgroundHover: string
+	/** Darker shade on hover */
+	borderHover: string
 }
 
 /** Generates a deterministic hash from a string */
@@ -48,6 +52,8 @@ export function getCourseColorVars(courseCode: string): CourseColorVars {
 	return {
 		background: `--ant-${color}-3`,
 		border: `--ant-${color}-5`,
+		backgroundHover: `--ant-${color}-2`,
+		borderHover: `--ant-${color}-4`,
 	}
 }
 

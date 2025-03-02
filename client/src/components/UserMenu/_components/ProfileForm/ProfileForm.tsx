@@ -1,10 +1,9 @@
 import { useMutation } from '@tanstack/react-query'
 import { App, Col, Form, Input, Modal, ModalProps, Row, Skeleton } from 'antd'
-import axios from 'axios'
 import { CheckIcon } from 'lucide-react'
 import { useContext } from 'react'
 
-import { AXIOS_DEFAULT_CONFIG } from '@api/axios'
+import { usersApi } from '@api/axios'
 
 import { IdentityContext } from '@contexts'
 
@@ -59,8 +58,7 @@ export function ProfileFormModal(params: ProfileFormModalProps) {
 	const { notification } = App.useApp()
 
 	const { mutate: submit, isPending } = useMutation({
-		mutationFn: (payload: ProfileFormPayload) =>
-			axios.patch(`/users/${user?.id}/`, payload, AXIOS_DEFAULT_CONFIG),
+		mutationFn: (payload: ProfileFormPayload) => usersApi.usersPartialUpdate(user!.id, payload),
 		onSuccess: () => {
 			notification.success({ message: 'Profile enregistré' })
 			closeModal()

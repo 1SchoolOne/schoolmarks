@@ -1,10 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { App, Form, Input, Modal } from 'antd'
-import axios from 'axios'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 
-import { API_BASE_URL, AXIOS_DEFAULT_CONFIG } from '@api/axios'
-import { PutClassByIdResponse } from '@apiSchema/classes'
+import { classesApi } from '@api/axios'
 
 import { classLoader } from '..'
 
@@ -22,14 +20,8 @@ export function EditClassModal() {
 	const { notification } = App.useApp()
 
 	const { mutate: updateClass, isPending } = useMutation({
-		mutationFn: async (values: FormValues) => {
-			const { data } = await axios.put<PutClassByIdResponse>(
-				`${API_BASE_URL}/classes/${classData.id}/`,
-				values,
-				AXIOS_DEFAULT_CONFIG,
-			)
-			return data
-		},
+		mutationFn: async (values: FormValues) =>
+			classesApi.classesPartialUpdate(classData.id, values).then(({ data }) => data),
 		onSuccess: ({ name, code }) => {
 			queryClient.refetchQueries({
 				queryKey: ['classes'],

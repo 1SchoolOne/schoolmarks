@@ -1,20 +1,17 @@
 import { QueryClient } from '@tanstack/react-query'
 import { Navigate, Outlet } from 'react-router-dom'
 
-import { getClassById, getClasses } from '@api/classes'
-import { getCourseEnrollments } from '@api/courseEnrollments'
-import { getCourseById, getCourses } from '@api/courses'
-import { getUsers } from '@api/users'
+import { classesApi, coursesApi, usersApi } from '@api/axios'
 
 import { ProtectedRoute } from '@components'
 
 import { Route } from '@types'
 
-import { AddStudents } from './classes/AddStudents'
 import { ClassAdminTable } from './classes/ClassAdminTable'
-import { CreateClass } from './classes/CreateClass'
+import { CreateClassForm } from './classes/CreateClassForm/CreateClassForm'
 import { EditClassModal } from './classes/EditClassModal'
 import { EnrollCourses } from './classes/EnrollCourses'
+import { EnrollStudents } from './classes/EnrollStudents'
 import { CourseAdminTable } from './courses/CourseAdminTable'
 import { CreateCourse } from './courses/CreateCourse'
 import { EditCourseModal } from './courses/EditCourseModal'
@@ -35,7 +32,19 @@ export function getAdminRoute(queryClient: QueryClient): Route {
 	return {
 		path: 'admin',
 		element: (
-			<ProtectedRoute restrictedTo={['admin']}>
+			<ProtectedRoute
+				restrictedTo={['admin']}
+				redirectTo={(role) => {
+					switch (role) {
+						case 'student':
+							return '/app/calendar'
+						case 'teacher':
+							return '/app/attendance'
+						case 'admin':
+							return '/app/admin/users'
+					}
+				}}
+			>
 				<Outlet />
 			</ProtectedRoute>
 		),
@@ -90,8 +99,14 @@ export function getAdminRoute(queryClient: QueryClient): Route {
 					},
 					{
 						path: 'new',
-						loader: () => studentsLoader(queryClient),
-						element: <CreateClass />,
+						handle: {
+							crumb: {
+								label: 'Créer une classe',
+								path: 'new',
+							},
+						},
+						loader: () => createClassLoader(queryClient),
+						element: <CreateClassForm />,
 					},
 					{
 						path: 'edit/:classId',
@@ -104,13 +119,14 @@ export function getAdminRoute(queryClient: QueryClient): Route {
 						),
 					},
 					{
-						path: ':classId/add-students',
-						loader: ({ params }) => classLoader({ queryClient, classId: params.classId }),
-						element: <AddStudents />,
+						path: ':classId/enroll-students',
+						loader: ({ params }) => enrollStudentsLoader({ queryClient, classId: params.classId }),
+						element: <EnrollStudents />,
+						errorElement: <EnrollStudents.ErrorBoundary />,
 					},
 					{
 						path: ':classId/enroll-courses',
-						loader: ({ params }) => classCoursesLoader({ queryClient, classId: params.classId }),
+						loader: ({ params }) => enrollCoursesLoader({ queryClient, classId: params.classId }),
 						element: <EnrollCourses />,
 						errorElement: <EnrollCourses.ErrorBoundary />,
 					},
@@ -279,36 +295,25 @@ export function getAdminRoute(queryClient: QueryClient): Route {
 export function userAdminTableLoader(queryClient: QueryClient) {
 	return queryClient.fetchQuery({
 		queryKey: ['users'],
-		queryFn: () => getUsers(),
+		queryFn: () => usersApi.usersList().then(({ data }) => data),
 	})
 }
 
 export function classAdminTableLoader(queryClient: QueryClient) {
 	return queryClient.fetchQuery({
 		queryKey: ['classes'],
-		queryFn: getClasses,
+		queryFn: () => classesApi.classesList().then(({ data }) => data),
 	})
 }
 
 export function studentsLoader(queryClient: QueryClient) {
 	return queryClient.fetchQuery({
 		queryKey: ['users', { role: 'student' }],
-		queryFn: () => getUsers({ role: 'student' }),
+		queryFn: () => usersApi.usersList('student').then(({ data }) => data),
 	})
 }
 
-export function classLoader(params: { queryClient: QueryClient; classId: string | undefined }) {
-	const { queryClient, classId } = params
-
-	if (!classId) throw new Error('classId is undefined')
-
-	return queryClient.fetchQuery({
-		queryKey: ['class', classId],
-		queryFn: () => getClassById(classId),
-	})
-}
-
-export async function classCoursesLoader(params: {
+export async function classLoader(params: {
 	queryClient: QueryClient
 	classId: string | undefined
 }) {
@@ -316,31 +321,45 @@ export async function classCoursesLoader(params: {
 
 	if (!classId) throw new Error('classId is undefined')
 
-	const [courseEnrollments, courses] = await Promise.all([
-		queryClient.fetchQuery({
-			queryKey: ['courses', classId],
-			queryFn: () => getCourseEnrollments({ class_group: classId }),
-		}),
+	return queryClient.fetchQuery({
+		queryKey: ['classes', classId],
+		queryFn: () => classesApi.classesRetrieve(classId).then(({ data }) => data),
+	})
+}
+
+export async function enrollCoursesLoader(params: {
+	queryClient: QueryClient
+	classId: string | undefined
+}) {
+	const { queryClient, classId } = params
+
+	if (!classId) throw new Error('classId is undefined')
+
+	const [courses, enrolledCourses] = await Promise.all([
 		queryClient.fetchQuery({
 			queryKey: ['courses'],
-			queryFn: getCourses,
+			queryFn: () => coursesApi.coursesList().then(({ data }) => data),
+		}),
+		queryClient.fetchQuery({
+			queryKey: ['courses', { classId }],
+			queryFn: () => classesApi.classesCoursesRetrieve(classId).then(({ data }) => data),
 		}),
 	])
 
-	return { courses, courseEnrollments }
+	return { courses, enrolledCourses }
 }
 
 export function coursesLoader(queryClient: QueryClient) {
 	return queryClient.fetchQuery({
 		queryKey: ['courses'],
-		queryFn: getCourses,
+		queryFn: () => coursesApi.coursesList().then(({ data }) => data),
 	})
 }
 
 export function teachersLoader(queryClient: QueryClient) {
 	return queryClient.fetchQuery({
 		queryKey: ['users', { role: 'teacher' }],
-		queryFn: () => getUsers({ role: 'teacher' }),
+		queryFn: () => usersApi.usersList('teacher').then(({ data }) => data),
 	})
 }
 
@@ -355,13 +374,50 @@ export async function editCourseLoader(params: {
 	const [course, teachers] = await Promise.all([
 		queryClient.fetchQuery({
 			queryKey: ['courses', courseId],
-			queryFn: () => getCourseById(courseId),
+			queryFn: () => coursesApi.coursesRetrieve(courseId).then(({ data }) => data),
 		}),
 		queryClient.fetchQuery({
 			queryKey: ['users', { role: 'teacher' }],
-			queryFn: () => getUsers({ role: 'teacher' }),
+			queryFn: () => usersApi.usersList('teacher').then(({ data }) => data),
 		}),
 	])
 
 	return { course, teachers }
+}
+
+export async function createClassLoader(queryClient: QueryClient) {
+	const [students, courses] = await Promise.all([
+		queryClient.fetchQuery({
+			queryKey: ['users', { role: 'student' }],
+			queryFn: () => usersApi.usersList('student').then(({ data }) => data),
+		}),
+		queryClient.fetchQuery({
+			queryKey: ['courses'],
+			queryFn: () => coursesApi.coursesList().then(({ data }) => data),
+		}),
+	])
+
+	return { students, courses }
+}
+
+export async function enrollStudentsLoader(params: {
+	queryClient: QueryClient
+	classId: string | undefined
+}) {
+	const { queryClient, classId } = params
+
+	if (!classId) throw new Error('classId is undefined')
+
+	const [classStudents, students] = await Promise.all([
+		queryClient.fetchQuery({
+			queryKey: ['users', { classId }],
+			queryFn: () => classesApi.classesStudentsRetrieve(classId).then(({ data }) => data),
+		}),
+		queryClient.fetchQuery({
+			queryKey: ['users', { role: 'student' }],
+			queryFn: () => usersApi.usersList('student').then(({ data }) => data),
+		}),
+	])
+
+	return { classStudents, students }
 }

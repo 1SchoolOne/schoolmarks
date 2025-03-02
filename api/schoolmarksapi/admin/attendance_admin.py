@@ -1,24 +1,18 @@
 from django.contrib import admin
-from schoolmarksapi.models import AttendanceDetail, AttendanceRecord
+from schoolmarksapi.models import Attendance
 
 
-@admin.register(AttendanceDetail)
-class AttendanceDetailAdmin(admin.ModelAdmin):
+@admin.register(Attendance)
+class AttendanceAdmin(admin.ModelAdmin):
     list_display = (
-        "attendance_record_id",
-        "student_id",
-        "class_session_id",
-        "course_id",
-        "status",
+        "class_session__course__name",
+        "get_student_fullname",
         "checked_in_at",
-        "minutes_late",
+        "status",
     )
-    search_fields = ("student_id__email", "status", "course_id__name")
-    list_filter = ("status",)
-
-
-@admin.register(AttendanceRecord)
-class AttendanceRecordAdmin(admin.ModelAdmin):
-    list_display = ("checkin_session_id", "student_id", "checked_in_at", "status")
     search_fields = ("student_id__email", "status")
     list_filter = ("status",)
+
+    @admin.display(description="Student")
+    def get_student_fullname(self, obj):
+        return f"{obj.student.first_name} {obj.student.last_name}"

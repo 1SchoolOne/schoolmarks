@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 import { Alert, AlertProps, Button, Flex, Form, Input, Typography } from 'antd'
-import axios from 'axios'
 import classnames from 'classnames'
 import dayjs from 'dayjs'
 import {
@@ -10,40 +9,14 @@ import {
 	CircleOffIcon,
 	ClockIcon,
 	MapPinIcon,
-	MoveRightIcon,
 } from 'lucide-react'
 import { useState } from 'react'
-import { useLoaderData, useNavigate, useParams } from 'react-router-dom'
+import { useLoaderData, useNavigate } from 'react-router-dom'
 
-import { getAttendanceRecords } from '@api/attendanceRecords'
-import { AXIOS_DEFAULT_CONFIG } from '@api/axios'
-import { CLASS_SESSIONS_API_URL } from '@api/classSessions'
-import { ClassSessionDetail } from '@apiSchema/classSessions'
+import { attendanceApi, classSessionsApi } from '@api/axios'
 
 import { registerAttendanceLoader } from '.'
-
-function formatTimeFrame(startTime: string | undefined, endTime: string | undefined) {
-	if (!startTime && !endTime) {
-		return (
-			<Flex align="center" gap={6}>
-				<span>--:--</span>
-				<MoveRightIcon size={16} />
-				<span>--:--</span>
-			</Flex>
-		)
-	}
-
-	const formattedStartTime = `${startTime!.split(':')[0]}:${startTime!.split(':')[1]}`
-	const formattedEndTime = `${endTime!.split(':')[0]}:${endTime!.split(':')[1]}`
-
-	return (
-		<Flex align="center" gap={6}>
-			<span>{formattedStartTime}</span>
-			<MoveRightIcon size={16} color="var(--ant-color-text-tertiary)" />
-			<span>{formattedEndTime}</span>
-		</Flex>
-	)
-}
+import { formatTimeFrame } from './RegisterAttendance-utils'
 
 interface AttendanceFormValues {
 	otp: string
@@ -67,29 +40,23 @@ export function AttendanceForm({ onSubmit }: { onSubmit: (values: AttendanceForm
 		useLoaderData() as Awaited<ReturnType<typeof registerAttendanceLoader>>
 	const [isOTPValid, setIsOTPValid] = useState(false)
 	const [formInstance] = Form.useForm()
-	const params = useParams()
 	const navigate = useNavigate()
 
 	const { data: classSession } = useQuery({
-		queryKey: ['classSession', { checkinSessionId: params.checkinSessionId }],
-		queryFn: async () => {
-			const { data } = await axios.get<ClassSessionDetail>(
-				`${CLASS_SESSIONS_API_URL}?checkin_session_id=${params.checkinSessionId}`,
-				AXIOS_DEFAULT_CONFIG,
-			)
-			return data
-		},
+		queryKey: ['classSession', initialClassSession.id],
+		queryFn: () =>
+			classSessionsApi.classSessionsRetrieve(initialClassSession.id).then(({ data }) => data),
 		initialData: initialClassSession,
-		enabled: !!params.checkinSessionId,
 	})
 
 	const { data: attendance } = useQuery({
-		queryKey: ['attendanceRecords', params.checkinSessionId],
-		queryFn: async () => {
-			const records = await getAttendanceRecords()
-
-			return records.filter((a) => a.checkin_session === params.checkinSessionId)[0] ?? null
-		},
+		queryKey: ['attendanceRecords', { classSessionId: classSession.id }],
+		queryFn: () =>
+			attendanceApi
+				.attendancesList({
+					params: { class_session_id: classSession.id },
+				})
+				.then(({ data }) => data[0] ?? null),
 		initialData: initialAttendance,
 	})
 

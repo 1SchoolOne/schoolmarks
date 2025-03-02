@@ -1,43 +1,42 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Card, Flex, Grid } from 'antd'
-import axios from 'axios'
-import { useParams } from 'react-router-dom'
+import { App, Card, Flex, Grid } from 'antd'
+import { useLoaderData } from 'react-router-dom'
 
-import { AXIOS_DEFAULT_CONFIG } from '@api/axios'
-import { PostAttendanceRecordResponse } from '@apiSchema/attendanceRecords'
+import { checkinSessionsApi } from '@api/axios'
 
-import { isUUID } from '@utils/isUUID'
-
+import { registerAttendanceLoader } from '.'
 import { AttendanceForm } from './AttendanceForm'
 
 import './RegisterAttendance-styles.less'
 
 export function RegisterAttendance() {
-	const params = useParams()
-	const isValidSessionId = isUUID(String(params.checkinSessionId))
+	const { classSession } = useLoaderData() as Awaited<ReturnType<typeof registerAttendanceLoader>>
 	const screens = Grid.useBreakpoint()
 	const queryClient = useQueryClient()
+	const { notification } = App.useApp()
 
 	const { mutate } = useMutation({
 		mutationFn: (otp: string) => {
-			if (!isValidSessionId) {
-				throw Error("La session d'appel n'est pas valide")
+			if (!classSession.checkin_session) {
+				throw new Error('Checkin session is not opened yet')
 			}
 
-			return axios.post<PostAttendanceRecordResponse>(
-				`/attendance_records/`,
-				{
-					checkin_session_id: params.checkinSessionId,
-					totp_code: otp,
-				},
-				AXIOS_DEFAULT_CONFIG,
-			)
+			return checkinSessionsApi
+				.checkinSessionsRegisterCreate(classSession.checkin_session.id, {
+					totp_code: Number(otp),
+				})
+				.then(({ data }) => data)
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: ['classSession', { checkinSessionId: params.checkinSessionId }],
+				queryKey: ['classSession', classSession.id],
 			})
-			queryClient.refetchQueries({ queryKey: ['attendanceRecords', params.checkinSessionId] })
+			queryClient.refetchQueries({
+				queryKey: ['attendanceRecords', { classSessionId: classSession.id }],
+			})
+		},
+		onError: (err) => {
+			notification.error({ message: 'Erreur', description: err.message })
 		},
 	})
 

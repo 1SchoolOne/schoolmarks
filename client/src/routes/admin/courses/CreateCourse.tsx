@@ -1,18 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { App, Col, Form, Input, Modal, Row, Select } from 'antd'
-import axios from 'axios'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 
-import { API_BASE_URL, AXIOS_DEFAULT_CONFIG } from '@api/axios'
-import { getUsers } from '@api/users'
-import { Course } from '@apiSchema/courses'
+import { coursesApi, usersApi } from '@api/axios'
+
+import { CourseInput } from '@apiClient'
 
 import { teachersLoader } from '..'
 import { CourseAdminTable } from './CourseAdminTable'
 
-interface FormValues extends Omit<Course, 'professor'> {
-	professor_id: number
-}
+type FormValues = CourseInput
 
 export function CreateCourse() {
 	const initialData = useLoaderData() as Awaited<ReturnType<typeof teachersLoader>>
@@ -23,15 +20,14 @@ export function CreateCourse() {
 
 	const { data: teachers } = useQuery({
 		queryKey: ['users', { role: 'teacher' }],
-		queryFn: () => getUsers({ role: 'teacher' }),
+		queryFn: () => usersApi.usersList('teacher').then(({ data }) => data),
 		initialData,
 	})
 
 	const { mutate: createCourse } = useMutation({
-		mutationFn: (values: FormValues) =>
-			axios.post(`${API_BASE_URL}/courses/`, values, AXIOS_DEFAULT_CONFIG),
-		onSuccess: async () => {
-			await queryClient.invalidateQueries({
+		mutationFn: (values: FormValues) => coursesApi.coursesCreate(values),
+		onSuccess: () => {
+			queryClient.refetchQueries({
 				queryKey: ['courses'],
 			})
 			notification.success({ message: 'Cours créée avec succès.' })
@@ -47,9 +43,10 @@ export function CreateCourse() {
 			<CourseAdminTable />
 			<Modal
 				open
-				title="Ajouter un cours"
+				title="Créer un cours"
 				onCancel={() => navigate('/app/admin/courses')}
 				onOk={formInstance.submit}
+				okText="Créer"
 			>
 				<Form
 					layout="vertical"
@@ -66,12 +63,62 @@ export function CreateCourse() {
 				>
 					<Row gutter={[8, 8]}>
 						<Col span={24}>
-							<Form.Item label="Nom" name="name" rules={[{ required: true }]}>
+							<Form.Item
+								label="Nom"
+								name="name"
+								validateDebounce={500}
+								rules={[
+									{ required: true },
+									{
+										validator: (_, value) => {
+											return coursesApi
+												.coursesList(undefined, undefined, value)
+												.then(({ data }) => {
+													const nameExists = data.find(
+														({ name }) =>
+															name.toLocaleLowerCase() === String(value).toLocaleLowerCase(),
+													)
+
+													if (nameExists) {
+														return Promise.reject('Un cours avec ce nom existe déjà.')
+													}
+
+													return Promise.resolve()
+												})
+										},
+									},
+								]}
+							>
 								<Input />
 							</Form.Item>
 						</Col>
 						<Col span={12}>
-							<Form.Item label="Code" name="code" rules={[{ required: true }]}>
+							<Form.Item
+								label="Code"
+								name="code"
+								validateDebounce={500}
+								rules={[
+									{ required: true },
+									{
+										validator: (_, value) => {
+											return coursesApi
+												.coursesList(undefined, value, undefined)
+												.then(({ data }) => {
+													const nameExists = data.find(
+														({ code }) =>
+															code.toLocaleLowerCase() === String(value).toLocaleLowerCase(),
+													)
+
+													if (nameExists) {
+														return Promise.reject('Un cours avec ce code existe déjà.')
+													}
+
+													return Promise.resolve()
+												})
+										},
+									},
+								]}
+							>
 								<Input />
 							</Form.Item>
 						</Col>

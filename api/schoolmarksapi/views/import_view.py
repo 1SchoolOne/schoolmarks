@@ -2,9 +2,12 @@ import math
 from rest_framework import status, views
 from rest_framework.response import Response
 import csv
+import os
 from io import TextIOWrapper
 import uuid
-from common.utils import ImportStatusService
+import redis
+import json
+from typing import Dict, List, Literal, Optional, Tuple
 from common.permissions import IsAdmin
 from schoolmarksapi.serializers.import_serializer import (
     CourseCSVRowSerializer,
@@ -22,13 +25,112 @@ from schoolmarksapi.tasks.import_classes import process_classes
 from drf_spectacular.utils import extend_schema_view, extend_schema
 
 
+class ImportStatusService:
+    def __init__(self):
+        self.redis_client = redis.Redis(
+            host=os.environ.get("TASK_REDIS_HOST"),  # Configure based on your settings
+            port=int(os.environ.get("TASK_REDIS_PORT")),
+            decode_responses=True,
+        )
+
+    def get_all_import_keys(self) -> List[str]:
+        """Get all import IDs by scanning for status keys"""
+        import_keys = []
+        cursor = 0
+
+        while True:
+            cursor, keys = self.redis_client.scan(cursor, match="import_*")
+            import_keys.extend(keys)
+
+            if cursor == 0:
+                break
+
+        # Extract import IDs from keys
+        return [key.split("_")[1] for key in import_keys]
+
+    def get_import_status(self, import_id: str) -> Optional[Dict]:
+        data = self.redis_client.get(f"import_{import_id}")
+        if not data:
+            return None
+
+        import_data = json.loads(data)
+
+        if import_data.get("results") and isinstance(import_data["results"], str):
+            import_data["results"] = json.loads(import_data["results"])
+
+        return import_data
+
+    def get_imports(
+        self,
+        type: Literal["users", "classes", "courses"],
+        page: Optional[int] = None,
+        per_page: Optional[int] = None,
+    ) -> Tuple[List[Dict], int]:
+        # Get all import keys
+        cursor = 0
+        import_keys: List[str] = []
+
+        while True:
+            cursor, key = self.redis_client.scan(cursor, "import_*")
+            import_keys.extend(key)
+
+            if cursor == 0:
+                break
+
+        # Get all imports
+        processing: List[Dict] = []
+        completed: List[Dict] = []
+
+        for key in import_keys:
+            import_id = key.split("_")[1]
+            import_data = self.get_import_status(import_id)
+
+            if not import_data:
+                continue
+
+            if import_data["type"] != type:
+                continue
+
+            data = {**import_data, "import_id": import_id}
+
+            if import_data["status"] == "processing":
+                processing.append(data)
+            else:
+                if not data.get("finished_at"):
+                    data["finished_at"] = data.get("started_at", 0)
+                completed.append(data)
+
+        # Sort by finished_at descending
+        processing.sort(key=lambda x: x.get("started_at", ""), reverse=True)
+        completed.sort(key=lambda x: x.get("finished_at", 0), reverse=True)
+
+        imports: List[Dict] = processing + completed
+
+        total = len(imports)
+
+        # Handle pagination
+        if page is not None and per_page is not None:
+            start = (page - 1) * per_page
+            end = start + per_page
+            imports[start:end]
+
+        return imports, total
+
+
 @extend_schema_view(
     get=extend_schema(
         responses=ImportStatusSerializer,
         description="Retrieves user import information",
     ),
     post=extend_schema(
-        request=ImportSerializer,
+        request={
+            "multipart/form-data": {
+                "type": "object",
+                "properties": {
+                    "file": {"type": "string", "format": "binary"},
+                },
+            }
+        },
         description="Creates a new user import",
         responses=CreateImportResponse,
     ),
@@ -119,7 +221,14 @@ class UserBulkImportView(views.APIView):
         description="Retrieves class import information",
     ),
     post=extend_schema(
-        request=ImportSerializer,
+        request={
+            "multipart/form-data": {
+                "type": "object",
+                "properties": {
+                    "file": {"type": "string", "format": "binary"},
+                },
+            }
+        },
         description="Creates a new class import",
         responses=CreateImportResponse,
     ),
@@ -212,7 +321,14 @@ class ClassBulkImportView(views.APIView):
         description="Retrieves course import information",
     ),
     post=extend_schema(
-        request=ImportSerializer,
+        request={
+            "multipart/form-data": {
+                "type": "object",
+                "properties": {
+                    "file": {"type": "string", "format": "binary"},
+                },
+            }
+        },
         description="Creates a new course import",
         responses=CreateImportResponse,
     ),

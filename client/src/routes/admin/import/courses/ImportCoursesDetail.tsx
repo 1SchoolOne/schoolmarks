@@ -1,19 +1,25 @@
 import { useQuery } from '@tanstack/react-query'
 import { App, Button, Col, Space, Table, Typography } from 'antd'
-import axios from 'axios'
 import { TriangleAlertIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { AssignTeacherModal } from '@routes/admin/courses/AssignTeacherModal'
 
-import { API_BASE_URL, AXIOS_DEFAULT_CONFIG } from '@api/axios'
+import { importApi } from '@api/axios'
 
 import { LoadingScreen } from '@components'
 
-import { ProcessingStatus } from '../_components/ImportForm/ImportForm'
 import { ImportProgress } from '../_components/ImportProgress/ImportProgress'
 import { ImportStatus } from '../types'
+
+interface CourseImportResult {
+	id: string
+	name: string
+	code: string
+	professor: string | null
+	professor_email: string | null
+}
 
 export function ImportCoursesDetail() {
 	const [status, setStatus] = useState<ImportStatus>()
@@ -24,6 +30,7 @@ export function ImportCoursesDetail() {
 
 	const { importId } = params
 
+	// Narrow down the type of importProgress.results using `select`
 	const {
 		data: importProgress,
 		isLoading,
@@ -31,24 +38,15 @@ export function ImportCoursesDetail() {
 	} = useQuery({
 		queryKey: ['import-progress', importId],
 		queryFn: async () => {
-			const { data } = await axios.get<{
-				progress: number
-				status: ProcessingStatus
-				results: Array<{
-					id: string
-					name: string
-					code: string
-					professor: string | null
-					professor_email: string
-				}>
-				warnings: string[]
-				error: unknown
-			}>(`${API_BASE_URL}/import/${importId}`, AXIOS_DEFAULT_CONFIG)
+			const { data } = await importApi.importRetrieve(importId!)
 
 			setStatus(data.status)
 
 			return data
 		},
+		// Les types générés par l'API sont trop vagues. On cast les résultats pour
+		// avoir un type plus précis.
+		select: (data) => ({ ...data, results: data.results as CourseImportResult[] }),
 		refetchInterval: status === 'processing' ? 1000 : undefined,
 		enabled: !!importId,
 	})

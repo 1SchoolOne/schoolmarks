@@ -1,5 +1,5 @@
 from django.contrib import admin
-from schoolmarksapi.models import Course, CourseEnrollment
+from schoolmarksapi.models import Course, CourseClassEnrollment
 
 
 @admin.register(Course)
@@ -9,7 +9,7 @@ class CourseAdmin(admin.ModelAdmin):
     list_filter = ("professor_id",)
 
 
-@admin.register(CourseEnrollment)
-class CourseEnrollmentAdmin(admin.ModelAdmin):
-    list_display = ("course_id", "class_group_id", "enrolled_at")
-    search_fields = ("course_id__name", "class_group_id__name")
+@admin.register(CourseClassEnrollment)
+class CourseClassEnrollmentAdmin(admin.ModelAdmin):
+    list_display = ("course__name", "class_group__name", "enrolled_at")
+    search_fields = ("course__name", "class_group__name")

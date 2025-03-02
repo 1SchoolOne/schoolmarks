@@ -26,6 +26,7 @@ export interface MandatoryProperties {
 }
 
 export interface CalendarProps<CellData extends MandatoryProperties> {
+	className?: string
 	dataSource: CellData[]
 	cellRender: (cellData: CellData) => ReactNode
 	hourHeight: number

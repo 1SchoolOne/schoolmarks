@@ -1,19 +1,14 @@
 import { Button, Select, Space, Typography } from 'antd'
 import { DefaultOptionType } from 'antd/es/select'
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { useContext } from 'react'
 
 import { capitalize } from '@utils/capitalize'
 
-import './CalendarHeader-styles.less'
+import { CalendarContext } from '../../CalendarContext'
 
-interface CalendarHeaderProps {
-	currentDate: Dayjs
-	updateCurrentDate: (operation: 'next' | 'prev') => void
-	handleMonthSelectChange: (newMonth: number) => void
-	handleYearSelectChange: (newYear: number) => void
-	handleToCurrentWeek: React.MouseEventHandler<HTMLElement>
-}
+import './CalendarHeader-styles.less'
 
 const monthOptions: DefaultOptionType[] = Array.from({ length: 12 }, (_, i) => {
 	const month = dayjs().locale('fr').month(i).format('MMMM')
@@ -30,17 +25,17 @@ const yearOptions = Array.from({ length: 7 }, (_, i) => currentYear - 1 + i).map
 	value: year,
 }))
 
-export function CalendarHeader(props: CalendarHeaderProps) {
-	const totalWeeks = Math.ceil(props.currentDate.endOf('month').date() / 7)
-	const selectedWeek = Math.min(Math.ceil(props.currentDate.date() / 7), totalWeeks)
+export function CalendarHeader() {
+	const {
+		currentDate,
+		updateCurrentDate,
+		handleMonthSelectChange,
+		handleYearSelectChange,
+		handleToCurrentWeek,
+	} = useContext(CalendarContext)
 
-	function handleNextWeek() {
-		props.updateCurrentDate('next')
-	}
-
-	function handlePrevWeek() {
-		props.updateCurrentDate('prev')
-	}
+	const totalWeeks = Math.ceil(currentDate.endOf('month').date() / 7)
+	const selectedWeek = Math.min(Math.ceil(currentDate.date() / 7), totalWeeks)
 
 	return (
 		<Space className="calendar-filter-container">
@@ -48,23 +43,31 @@ export function CalendarHeader(props: CalendarHeaderProps) {
 				<Select
 					className="month"
 					options={monthOptions}
-					value={props.currentDate.month()}
-					onChange={props.handleMonthSelectChange}
+					value={currentDate.month()}
+					onChange={handleMonthSelectChange}
 				/>
 				<Select
 					className="year"
 					options={yearOptions}
-					value={props.currentDate.year()}
-					onChange={props.handleYearSelectChange}
+					value={currentDate.year()}
+					onChange={handleYearSelectChange}
 				/>
 			</div>
 			<div className="calendar-switch-week">
 				<div className="switch-week-by-week">
-					<Button type="primary" icon={<ArrowLeft size={16} />} onClick={handlePrevWeek} />
+					<Button
+						type="primary"
+						icon={<ArrowLeft size={16} />}
+						onClick={() => updateCurrentDate('prevWeek')}
+					/>
 					<Typography.Text>Semaine {selectedWeek}</Typography.Text>
-					<Button type="primary" icon={<ArrowRight size={16} />} onClick={handleNextWeek} />
+					<Button
+						type="primary"
+						icon={<ArrowRight size={16} />}
+						onClick={() => updateCurrentDate('nextWeek')}
+					/>
 				</div>
-				<Button onClick={props.handleToCurrentWeek}>Cette semaine</Button>
+				<Button onClick={handleToCurrentWeek}>Cette semaine</Button>
 			</div>
 		</Space>
 	)

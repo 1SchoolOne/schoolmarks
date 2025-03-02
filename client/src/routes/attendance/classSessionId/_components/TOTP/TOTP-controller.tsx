@@ -1,11 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
 import dayjs from 'dayjs'
 import { useEffect, useRef, useState } from 'react'
 import { useLoaderData, useParams } from 'react-router-dom'
 
-import { AXIOS_DEFAULT_CONFIG } from '@api/axios'
-import { getClassSessionQueryOptions } from '@api/classSessions'
+import { checkinSessionsApi, classSessionsApi } from '@api/axios'
 
 import { classSessionloader } from '../../..'
 
@@ -16,10 +14,10 @@ export function useController() {
 	const [totpExpiresAt, setTotpExpiresAt] = useState(dayjs().add(15, 'seconds'))
 	const previousTotp = useRef<string>()
 
-	const classSessionQueryOptions = getClassSessionQueryOptions(params.classSessionId)
-
 	const { data: classSession } = useQuery({
-		...classSessionQueryOptions,
+		queryKey: ['classSession', params.classSessionId],
+		queryFn: () =>
+			classSessionsApi.classSessionsRetrieve(params.classSessionId!).then(({ data }) => data),
 		initialData,
 		enabled: typeof params.classSessionId === 'string',
 	})
@@ -27,11 +25,11 @@ export function useController() {
 	const { data: totp } = useQuery({
 		queryKey: ['checkin-session', 'totp', classSession?.checkin_session?.id],
 		queryFn: async () => {
-			const { data } = await axios.get<{ totp: string }>(
-				`/checkin_sessions/${classSession?.checkin_session?.id}/totp/`,
-				AXIOS_DEFAULT_CONFIG,
+			const { data } = await checkinSessionsApi.checkinSessionsTotpRetrieve(
+				classSession?.checkin_session?.id,
 			)
 
+			// TODO: fix api totp typing
 			if (previousTotp.current !== data.totp) {
 				setTotpExpiresAt(dayjs().add(15.5, 'seconds'))
 			}

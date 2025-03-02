@@ -11,12 +11,20 @@ class ClassAdmin(admin.ModelAdmin):
 
 @admin.register(ClassSession)
 class ClassSessionAdmin(admin.ModelAdmin):
-    list_display = ("course_id", "date", "start_time", "end_time", "room", "status")
-    search_fields = ("course_id__name", "room")
-    list_filter = ("date", "status")
+    list_display = (
+        "course__name",
+        "class_group__name",
+        "date",
+        "start_time",
+        "end_time",
+        "room",
+    )
+    search_fields = ("course__name", "class_group__name", "room")
+    list_filter = ("date",)
 
 
 @admin.register(ClassStudent)
 class ClassStudentAdmin(admin.ModelAdmin):
-    list_display = ("class_group_id", "student_id")
-    search_fields = ("class_group_id__name", "student_id__email")
+    list_display = ("class_group__name", "student__email", "joined_at")
+    search_fields = ("class_group__name", "student__email")
+    list_filter = ("joined_at",)

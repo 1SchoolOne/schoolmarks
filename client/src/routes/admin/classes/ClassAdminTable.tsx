@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { App, Button, Popover, Space, Table, Tooltip, Typography } from 'antd'
-import axios from 'axios'
 import {
 	BookPlusIcon,
 	InfoIcon,
@@ -12,9 +11,9 @@ import {
 import React, { useState } from 'react'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 
-import { API_BASE_URL, AXIOS_DEFAULT_CONFIG } from '@api/axios'
-import { getClasses } from '@api/classes'
-import { User } from '@apiSchema/users'
+import { classesApi } from '@api/axios'
+
+import { User } from '@apiClient'
 
 import { classAdminTableLoader } from '..'
 
@@ -30,20 +29,15 @@ export function ClassAdminTable() {
 
 	const { data } = useQuery({
 		queryKey: ['classes'],
-		queryFn: getClasses,
+		queryFn: () => classesApi.classesList().then(({ data }) => data),
 		initialData,
 	})
 
 	const { mutate: deleteClasses } = useMutation({
-		mutationFn: async (classIds: React.Key[]) => {
-			const { data } = await axios.post<{ detail: string; count: number }>(
-				`${API_BASE_URL}/classes/bulk_delete/`,
-				{ ids: classIds },
-				AXIOS_DEFAULT_CONFIG,
-			)
-
-			return data
-		},
+		mutationFn: async (classIds: React.Key[]) =>
+			classesApi
+				.classesBulkDeleteCreate({ class_ids: classIds as string[] })
+				.then(({ data }) => data),
 		onSuccess: ({ count }) => {
 			notification.success({
 				message:
@@ -52,6 +46,7 @@ export function ClassAdminTable() {
 			queryClient.refetchQueries({
 				queryKey: ['classes'],
 			})
+			setSelectedKeys([])
 		},
 		onError: (err) => {
 			notification.error({ message: 'Erreur lors de la suppression', description: err.message })
@@ -69,7 +64,7 @@ export function ClassAdminTable() {
 						icon={<PlusIcon size={16} />}
 						onClick={() => navigate('/app/admin/classes/new')}
 					>
-						Ajouter une classe
+						Créer une classe
 					</Button>
 					<Button
 						icon={<Trash2Icon size={16} />}
@@ -128,7 +123,7 @@ export function ClassAdminTable() {
 									icon={<UserPlusIcon size={16} />}
 									title="Ajouter des étudiants"
 									onClick={() => {
-										navigate(`/app/admin/classes/${classRecord.id}/add-students`)
+										navigate(`/app/admin/classes/${classRecord.id}/enroll-students`)
 									}}
 								/>
 							</Tooltip>

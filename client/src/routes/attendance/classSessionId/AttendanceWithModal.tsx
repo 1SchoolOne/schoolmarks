@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import { useContext, useState } from 'react'
 import { useLoaderData, useNavigate, useParams } from 'react-router-dom'
 
-import { getClassSession } from '@api/classSessions'
+import { classSessionsApi } from '@api/axios'
 
 import { IdentityContext } from '@contexts'
 
@@ -29,13 +29,13 @@ export function AttendanceWithModal() {
 	const { data: classSession } = useQuery({
 		queryKey: ['classSession', params.classSessionId],
 		queryFn: async () => {
-			const session = await getClassSession(String(params.classSessionId))
+			const { data } = await classSessionsApi.classSessionsRetrieve(params.classSessionId!)
 
-			if (session.checkin_session?.status === 'closed') {
+			if (data.checkin_session?.status === 'closed') {
 				setRefetchInterval(undefined)
 			}
 
-			return session
+			return data
 		},
 		initialData,
 		refetchInterval,
@@ -44,7 +44,7 @@ export function AttendanceWithModal() {
 
 	const isSessionClosed = classSession.checkin_session?.status === 'closed'
 	const sessionDate = dayjs(classSession.date).format('dddd DD MMMM')
-	const checkinSessionUrl = `${import.meta.env.VITE_CLIENT_HOST}/register-attendance/${classSession.checkin_session?.id}`
+	const checkinSessionUrl = `${import.meta.env.VITE_CLIENT_HOST}/register-attendance/${classSession.id}`
 
 	return (
 		<>
@@ -98,10 +98,7 @@ export function AttendanceWithModal() {
 						</>
 					)}
 					<Col span={isSessionClosed ? 24 : 12}>
-						<StudentList
-							checkinSessionId={classSession.checkin_session?.id}
-							isSessionClosed={isSessionClosed}
-						/>
+						<StudentList classSessionId={classSession.id} isSessionClosed={isSessionClosed} />
 					</Col>
 				</Row>
 			</Modal>

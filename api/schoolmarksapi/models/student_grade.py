@@ -1,13 +1,13 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-from schoolmarksapi.models import User, Grade
+from schoolmarksapi.models import User, Assessment
 import uuid
 
 
 class StudentGrade(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    grade = models.ForeignKey(
-        Grade,
+    assessment = models.ForeignKey(
+        Assessment,
         on_delete=models.CASCADE,
         related_name="student_grades",
         verbose_name="Évaluation",
@@ -23,15 +23,15 @@ class StudentGrade(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["grade", "student"],
+                fields=["assessment", "student"],
                 name="unique_student_grade",
                 violation_error_message="Un étudiant ne peut avoir qu'une seule note par évaluation",
             )
         ]
 
     def clean(self):
-        if self.grade and self.value is not None:
-            if self.value < 0 or self.value > self.grade.max_value:
+        if self.assessment and self.value is not None:
+            if self.value < 0 or self.value > self.assessment.max_value:
                 raise ValidationError(
                     "La note doit être comprise entre 0 et la note maximale définie pour cette évaluation"
                 )

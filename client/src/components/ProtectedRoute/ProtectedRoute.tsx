@@ -2,27 +2,41 @@ import { PropsWithChildren } from '@1schoolone/ui'
 import { useContext } from 'react'
 import { Navigate } from 'react-router-dom'
 
-import { IdentityContext } from '@contexts'
+import { UserRoleEnum as UserRole } from '@apiClient'
 
-import { UserRole } from '@types'
+import { IdentityContext } from '@contexts'
 
 import { LoadingScreen } from '../LoadingScreen/LoadingScreen'
 
-interface ProtectedRouteProps {
+interface ProtectedRouteWithRoleCheckProps {
 	/** Permet de restreindre l'accès à certains rôles. */
-	restrictedTo?: [UserRole, ...UserRole[]]
-	redirectTo?: string
+	restrictedTo: [UserRole, ...UserRole[]]
+	redirectTo: (userRole: UserRole) => string
 }
 
+interface ProtectedRouteWithoutRoleCheckProps {
+	/** Permet de restreindre l'accès à certains rôles. */
+	restrictedTo?: never
+	redirectTo?: never
+}
+
+type ProtectedRouteProps = ProtectedRouteWithRoleCheckProps | ProtectedRouteWithoutRoleCheckProps
+
 function RoleCheck(
-	props: PropsWithChildren<{ userRole: UserRole; acceptedRoles: UserRole[]; redirectTo?: string }>,
+	props: PropsWithChildren<{
+		userRole: UserRole
+		acceptedRoles: UserRole[]
+		redirectTo: (userRole: UserRole) => string
+	}>,
 ) {
-	const { acceptedRoles, userRole, children, redirectTo = '/app/attendance' } = props
+	const { acceptedRoles, userRole, children, redirectTo } = props
+
+	const redirectToRoute = redirectTo(userRole)
 
 	if (acceptedRoles.includes(userRole)) {
 		return children
 	} else {
-		return <Navigate to={redirectTo} replace />
+		return <Navigate to={redirectToRoute} replace />
 	}
 }
 

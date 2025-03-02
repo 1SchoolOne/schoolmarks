@@ -2,10 +2,9 @@ from .user import User
 from .course import Course
 from .class_session import ClassSession
 from .checkin_session import CheckinSession
-from .attendance_record import AttendanceRecord
-from .attendance_detail import AttendanceDetail
+from .attendance import Attendance
 from .school_class import Class
 from .class_student import ClassStudent
-from .course_enrollment import CourseEnrollment
-from .grade import Grade
+from .assessment import Assessment
 from .student_grade import StudentGrade
+from .course_class_enrollment import CourseClassEnrollment

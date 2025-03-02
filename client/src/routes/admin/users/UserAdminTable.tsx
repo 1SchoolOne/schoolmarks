@@ -1,14 +1,13 @@
 import { PropsWithChildren } from '@1schoolone/ui'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { App, Button, Form, Popover, Segmented, Space, Table, Tag } from 'antd'
-import axios from 'axios'
 import { PlusIcon, Trash2Icon } from 'lucide-react'
 import { useState } from 'react'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 
-import { AXIOS_DEFAULT_CONFIG } from '@api/axios'
-import { getUsers } from '@api/users'
-import { User } from '@apiSchema/users'
+import { usersApi } from '@api/axios'
+
+import { User, UserRoleEnum } from '@apiClient'
 
 import { userAdminTableLoader } from '..'
 
@@ -48,8 +47,8 @@ function EditRolePopover({ user, children }: PropsWithChildren<{ user: User }>) 
 	const { notification } = App.useApp()
 
 	const { mutate: updateUserRole } = useMutation({
-		mutationFn: (values: { user_role: string }) =>
-			axios.patch(`/users/${user.id}/`, values, AXIOS_DEFAULT_CONFIG),
+		mutationFn: (values: { user_role: UserRoleEnum }) =>
+			usersApi.usersPartialUpdate(user.id, values).then(({ data }) => data),
 		onSuccess: async () => {
 			await queryClient.invalidateQueries({
 				queryKey: ['users'],
@@ -73,7 +72,9 @@ function EditRolePopover({ user, children }: PropsWithChildren<{ user: User }>) 
 			trigger="click"
 			open={isOpen}
 			onOpenChange={setIsOpen}
-			overlayClassName="edit-role-popover"
+			classNames={{
+				root: 'edit-role-popover',
+			}}
 			destroyTooltipOnHide
 			content={
 				<Form
@@ -113,12 +114,22 @@ export function UserAdminTable() {
 	const initialData = useLoaderData() as Awaited<ReturnType<typeof userAdminTableLoader>>
 	const navigate = useNavigate()
 	const queryClient = useQueryClient()
-	const { modal } = App.useApp()
+	const { modal, notification } = App.useApp()
 
 	const { data } = useQuery({
 		queryKey: ['users'],
-		queryFn: () => getUsers(),
+		queryFn: () => usersApi.usersList().then(({ data }) => data),
 		initialData,
+	})
+
+	const { mutate: deleteUser, isPending: isDeleting } = useMutation({
+		mutationFn: (userId: number) => usersApi.usersDestroy(userId),
+		onSuccess: () => {
+			notification.success({ message: 'Utilisateur supprimé avec succès.' })
+		},
+		onError: (err) => {
+			notification.error({ message: 'Erreur lors de la suppression', description: err.message })
+		},
 	})
 
 	return (
@@ -131,7 +142,7 @@ export function UserAdminTable() {
 					icon={<PlusIcon size={16} />}
 					onClick={() => navigate('/app/admin/users/new')}
 				>
-					Ajouter un utilisateur
+					Créer un utilisateur
 				</Button>
 			)}
 			rowKey={({ id }) => String(id)}
@@ -149,9 +160,9 @@ export function UserAdminTable() {
 									title: 'Supprimer',
 									content: `Êtes-vous sûr de vouloir supprimer l'utilisateur ${user.first_name} ${user.last_name} ?`,
 									okText: 'Supprimer',
-									okButtonProps: { danger: true },
-									onOk: async () => await axios.delete(`/users/${user.id}/`, AXIOS_DEFAULT_CONFIG),
-									afterClose: () => queryClient.refetchQueries({ queryKey: ['users'] }),
+									okButtonProps: { danger: true, loading: isDeleting },
+									onOk: () => deleteUser(user.id),
+									afterClose: () => queryClient.invalidateQueries({ queryKey: ['users'] }),
 								})
 							}
 							danger

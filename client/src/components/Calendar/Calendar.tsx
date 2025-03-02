@@ -1,13 +1,18 @@
-import { useMemo } from 'react'
+import { PropsWithChildren } from '@1schoolone/ui'
+import classnames from 'classnames'
+import React, { useContext, useMemo } from 'react'
 
 import { CalendarProps, MandatoryProperties } from './Calendar-types'
 import { getWeekDates } from './Calendar-utils'
+import { CalendarContext, CalendarProvider } from './CalendarContext'
 import { CalendarGrid } from './_components/CalendarGrid/CalendarGrid'
 import { CalendarHeader } from './_components/CalendarHeader/CalendarHeader'
-import { useCalendar } from './_components/CalendarHeader/CalendarHeader-utils'
 
-export function Calendar<CellData extends MandatoryProperties>(props: CalendarProps<CellData>) {
+import './Calendar-styles.less'
+
+function Calendar<CellData extends MandatoryProperties>(props: CalendarProps<CellData>) {
 	const {
+		className,
 		showHeader = true,
 		dataSource,
 		cellRender,
@@ -16,27 +21,13 @@ export function Calendar<CellData extends MandatoryProperties>(props: CalendarPr
 		lastHour = 18,
 	} = props
 
-	const {
-		currentDate,
-		updateCurrentDate,
-		handleMonthSelectChange,
-		handleYearSelectChange,
-		handleToCurrentWeek,
-	} = useCalendar()
+	const { currentDate } = useContext(CalendarContext)
 
 	const weekDates = useMemo(() => getWeekDates(currentDate), [currentDate])
 
 	return (
-		<div className="calendar-container">
-			{showHeader && (
-				<CalendarHeader
-					currentDate={currentDate}
-					updateCurrentDate={updateCurrentDate}
-					handleMonthSelectChange={handleMonthSelectChange}
-					handleYearSelectChange={handleYearSelectChange}
-					handleToCurrentWeek={handleToCurrentWeek}
-				/>
-			)}
+		<div className={classnames('calendar-container', className)}>
+			{showHeader && <CalendarHeader />}
 			<CalendarGrid
 				events={dataSource}
 				cellRender={cellRender}
@@ -48,3 +39,21 @@ export function Calendar<CellData extends MandatoryProperties>(props: CalendarPr
 		</div>
 	)
 }
+
+function CalendarCellContent(
+	props: PropsWithChildren<{ className?: string; style?: React.CSSProperties }>,
+) {
+	const { className, style, children } = props
+
+	return (
+		<div className={classnames('calendar-cell-content', className)} style={style}>
+			{children}
+		</div>
+	)
+}
+
+Calendar.Cell = CalendarCellContent
+Calendar.Context = CalendarContext
+Calendar.Provider = CalendarProvider
+
+export { Calendar }

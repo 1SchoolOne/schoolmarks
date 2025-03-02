@@ -1,56 +1,32 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { App, Col, Form, Modal, Result, Row, Transfer } from 'antd'
-import { TransferItem } from 'antd/es/transfer'
-import axios, { isAxiosError } from 'axios'
+import { App, Col, Form, Modal, Result, Row, Transfer, Typography } from 'antd'
+import { isAxiosError } from 'axios'
 import { useLoaderData, useNavigate, useParams, useRouteError } from 'react-router-dom'
 
-import { API_BASE_URL, AXIOS_DEFAULT_CONFIG } from '@api/axios'
-import { getCourseEnrollments } from '@api/courseEnrollments'
-import { getCourses } from '@api/courses'
-import { PostCourseEnrollmentResponse } from '@apiSchema/courseEnrollments'
+import { classesApi, coursesApi } from '@api/axios'
 
-import { classCoursesLoader } from '..'
+import { User } from '@apiClient'
+
+import { enrollCoursesLoader } from '..'
 import { ClassAdminTable } from './ClassAdminTable'
 
 interface FormValues {
 	courses: string[]
 }
 
-interface ArrayDiff<T> {
-	added: T[]
-	removed: T[]
-}
+function getTransferItemDescription(user: User): string {
+	const fullname = `${user.first_name} ${user.last_name}`
 
-/**
- * Compare deux tableaux et retourne leurs différences. Utilise des Sets pour
- * une recherche efficace lors de la comparaison des éléments.
- *
- * @example const initial = [1, 2, 3]; const updated = [2, 3, 4];
- * getDiff(initial, updated); // { added: [4], removed: [1] }
- *
- * @param initialArray - Le tableau original à comparer
- * @param newArray - Le nouveau tableau à comparer
- * @returns Un objet contenant deux tableaux : les éléments ajoutés et les
- *   éléments supprimés
- */
-function getDiff<T>(initialArray: T[], newArray: T[]): ArrayDiff<T> {
-	// Conversion des tableaux en Sets pour un temps de recherche en O(1)
-	const initialSet = new Set(initialArray)
-	const newSet = new Set(newArray)
+	if (fullname.trim() === '') {
+		return user.email
+	}
 
-	// Trouve les éléments qui ont été ajoutés (présents dans le nouveau mais pas dans l'initial)
-	// Utilise filter pour maintenir l'ordre des éléments tels qu'ils apparaissent dans newArray
-	const added = newArray.filter((item) => !initialSet.has(item))
-
-	// Trouve les éléments qui ont été supprimés (présents dans l'initial mais pas dans le nouveau)
-	// Utilise filter pour maintenir l'ordre des éléments tels qu'ils apparaissent dans initialArray
-	const removed = initialArray.filter((item) => !newSet.has(item))
-
-	return { added, removed }
+	return fullname
 }
 
 function EnrollCourses() {
-	const initialData = useLoaderData() as Awaited<ReturnType<typeof classCoursesLoader>>
+	const { courses: initialCourses, enrolledCourses: initialEnrolledCourses } =
+		useLoaderData() as Awaited<ReturnType<typeof enrollCoursesLoader>>
 	const [formInstance] = Form.useForm<FormValues>()
 	const watchedValues = Form.useWatch('courses', formInstance)
 	const navigate = useNavigate()
@@ -58,58 +34,30 @@ function EnrollCourses() {
 	const queryClient = useQueryClient()
 	const { notification } = App.useApp()
 
-	const { data: courseEnrollments } = useQuery({
-		queryKey: ['courses', params.classId],
-		queryFn: () => getCourseEnrollments({ class_group: params.classId }),
-		initialData: initialData.courseEnrollments,
-		enabled: params.classId !== undefined,
-	})
-
 	const { data: courses } = useQuery({
-		queryKey: ['courses'],
-		queryFn: getCourses,
-		initialData: initialData.courses,
+		queryKey: ['courses', { classId: params.classId }],
+		queryFn: () => coursesApi.coursesList().then(({ data }) => data),
+		initialData: initialCourses,
 	})
 
-	// TODO: simplifier la suppression
+	const { data: enrolledCourses } = useQuery({
+		queryKey: ['courses', { classId: params.classId }],
+		queryFn: () => classesApi.classesCoursesRetrieve(params.classId!).then(({ data }) => data),
+		initialData: initialEnrolledCourses,
+		enabled: !!params.classId,
+	})
+
 	const { mutate: updateEnrollments } = useMutation({
-		mutationFn: async ({ courses }: FormValues) => {
-			const initialValues = courseEnrollments.map((ce) => ce.course!.id!)
-
-			const { added, removed } = getDiff(initialValues, courses)
-
-			const addedResults = await Promise.all(
-				added.map((id) =>
-					axios.post<PostCourseEnrollmentResponse>(
-						`${API_BASE_URL}/course_enrollments/`,
-						{
-							course_id: id,
-							class_group_id: params.classId!,
-						},
-						AXIOS_DEFAULT_CONFIG,
-					),
-				),
-			)
-
-			const idsToRemove = courseEnrollments
-				.filter((c) => removed.includes(c.course!.id!))
-				.map((c) => c.id)
-
-			const removedResults = await Promise.all(
-				idsToRemove.map((id) =>
-					axios.delete(`${API_BASE_URL}/course_enrollments/${id}/`, AXIOS_DEFAULT_CONFIG),
-				),
-			)
-
-			return { added: addedResults.length, removed: removedResults.length }
-		},
-		onSuccess: ({ added, removed }) => {
-			queryClient.refetchQueries({
+		mutationFn: async (values: FormValues) =>
+			classesApi
+				.classesUpdateCoursesCreate(params.classId!, { course_ids: values.courses })
+				.then(({ data }) => data),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
 				queryKey: ['courses', params.classId],
 			})
 			notification.success({
-				message: 'Affectation des cours',
-				description: `Ajouté ${added} / Supprimé ${removed}`,
+				message: 'Affectation réussie.',
 			})
 			navigate('/app/admin/classes')
 		},
@@ -118,32 +66,33 @@ function EnrollCourses() {
 		},
 	})
 
-	const transferItems: TransferItem[] = courses.map((c) => ({
-		key: c.id,
-		title: c.name,
-	}))
-
 	return (
 		<>
 			<ClassAdminTable />
 			<Modal
+				className="enroll-courses-modal"
 				title="Affectation des cours"
-				open
+				okText="Affecter"
 				onOk={() => formInstance.submit()}
 				onCancel={() => navigate('/app/admin/classes')}
-				okText="Affecter"
 				destroyOnClose
+				open
 			>
 				<Form
 					preserve={false}
 					form={formInstance}
 					layout="vertical"
 					initialValues={{
-						courses: courseEnrollments.map((ce) => ce.course!.id),
+						courses: enrolledCourses.map(({ id }) => id),
 					}}
 					onFinish={updateEnrollments}
 				>
 					<Row gutter={[8, 8]}>
+						<Col span={24}>
+							<Typography.Text type="secondary">
+								Vous pouvez rechercher le nom du cours ou bien le nom du professeur.
+							</Typography.Text>
+						</Col>
 						<Col span={24}>
 							<Form.Item name="courses">
 								<Transfer
@@ -152,8 +101,26 @@ function EnrollCourses() {
 										itemsUnit: 'cours',
 									}}
 									targetKeys={watchedValues ?? []}
-									dataSource={transferItems}
-									render={(item) => item.title!}
+									dataSource={courses.map((c) => ({
+										key: c.id,
+										title: c.name,
+										description: getTransferItemDescription(c.professor),
+									}))}
+									render={({ title }) => title}
+									filterOption={(inputValue, item) => {
+										const matchName = item.title
+											?.toLocaleLowerCase()
+											.includes(inputValue.toLocaleLowerCase())
+										const matchProfessorName = item.description
+											.toLocaleLowerCase()
+											.includes(inputValue.toLocaleLowerCase())
+
+										return matchName || matchProfessorName
+									}}
+									listStyle={{
+										height: courses.length > 0 || enrolledCourses.length > 0 ? 300 : undefined,
+									}}
+									showSearch
 								/>
 							</Form.Item>
 						</Col>

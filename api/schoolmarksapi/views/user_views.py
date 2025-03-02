@@ -3,7 +3,8 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.permissions import IsAuthenticated
 from schoolmarksapi.models import User
-from schoolmarksapi.serializers import UserSerializer
+from schoolmarksapi.serializers import UserSerializer, UserInputSerializer
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -13,10 +14,21 @@ class UserViewSet(viewsets.ModelViewSet):
     search_fields = ["username", "email", "first_name", "last_name"]
     ordering_fields = ["username", "date_joined"]
 
+    def get_serializer_class(self):
+        if (
+            self.action == "create"
+            or self.action == "update"
+            or self.action == "partial_update"
+        ):
+            return UserInputSerializer
+
+        return super().get_serializer_class()
+
     def get_queryset(self):
         assert isinstance(self.request, Request)
         queryset = User.objects.all()
         role = self.request.query_params.get("role", None)
+        # TODO: remove class_id query param
         class_id = self.request.query_params.get("class_id", None)
 
         if role == "student":
@@ -47,6 +59,18 @@ class UserViewSet(viewsets.ModelViewSet):
 
         user.is_active = True
         user.save()
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="role",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
+            )
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
         if not (request.user.is_staff and request.user.is_superuser):

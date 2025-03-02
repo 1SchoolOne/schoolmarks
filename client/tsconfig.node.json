@@ -30,7 +30,7 @@
 			"@contexts": ["./src/contexts/index.ts"],
 			"@api/*": ["./src/api/*"],
 			"@helpers/*": ["./src/helpers/*"],
-			"@apiSchema/*": ["./src/types/api/*"]
+			"@apiClient": ["./src/api-client/index.ts"]
 		},
 
 		"types": ["vitest/globals"]

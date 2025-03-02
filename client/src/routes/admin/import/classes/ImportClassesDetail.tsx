@@ -1,16 +1,21 @@
 import { useQuery } from '@tanstack/react-query'
 import { Col, Table, Typography } from 'antd'
-import axios from 'axios'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { API_BASE_URL, AXIOS_DEFAULT_CONFIG } from '@api/axios'
+import { importApi } from '@api/axios'
 
 import { LoadingScreen } from '@components'
 
-import { ProcessingStatus } from '../_components/ImportForm/ImportForm'
 import { ImportProgress } from '../_components/ImportProgress/ImportProgress'
 import { ImportStatus } from '../types'
+
+interface ClassImportResult {
+	id: string
+	name: string
+	code: string
+	year_of_graduation: number
+}
 
 export function ImportClassesDetail() {
 	const [status, setStatus] = useState<ImportStatus>()
@@ -25,22 +30,13 @@ export function ImportClassesDetail() {
 	} = useQuery({
 		queryKey: ['import-progress', importId],
 		queryFn: async () => {
-			const { data } = await axios.get<{
-				progress: number
-				status: ProcessingStatus
-				results: Array<{
-					id: string
-					name: string
-					code: string
-					year_of_graduation: number
-				}>
-				error: unknown
-			}>(`${API_BASE_URL}/import/${importId}`, AXIOS_DEFAULT_CONFIG)
+			const { data } = await importApi.importRetrieve(importId!)
 
 			setStatus(data.status)
 
 			return data
 		},
+		select: (data) => ({ ...data, results: data.results as ClassImportResult[] }),
 		refetchInterval: status === 'processing' ? 1000 : undefined,
 		enabled: !!importId,
 	})

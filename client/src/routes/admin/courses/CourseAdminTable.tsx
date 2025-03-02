@@ -1,13 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { App, Button, Space, Table, Typography } from 'antd'
-import axios from 'axios'
 import { PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react'
 import React, { useState } from 'react'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 
-import { API_BASE_URL, AXIOS_DEFAULT_CONFIG } from '@api/axios'
-import { getCourses } from '@api/courses'
-import { User } from '@apiSchema/users'
+import { coursesApi } from '@api/axios'
+
+import { User } from '@apiClient'
 
 import { coursesLoader } from '..'
 
@@ -21,25 +20,20 @@ export function CourseAdminTable() {
 
 	const { data } = useQuery({
 		queryKey: ['courses'],
-		queryFn: getCourses,
+		queryFn: () => coursesApi.coursesList().then(({ data }) => data),
 		initialData,
 	})
 
 	const { mutate: deleteCourses } = useMutation({
-		mutationFn: async (courseIds: React.Key[]) => {
-			const { data } = await axios.post<{ detail: string; count: number }>(
-				`${API_BASE_URL}/courses/bulk_delete/`,
-				{ ids: courseIds },
-				AXIOS_DEFAULT_CONFIG,
-			)
-
-			return data
-		},
+		mutationFn: async (courseIds: React.Key[]) =>
+			coursesApi
+				.coursesBulkDeleteCreate({ course_ids: courseIds as string[] })
+				.then(({ data }) => data),
 		onSuccess: ({ count }) => {
 			notification.success({
 				message: count > 1 ? `${count} cours supprimés avec succès` : 'Cours supprimé avec succès',
 			})
-			queryClient.refetchQueries({ queryKey: ['courses'] })
+			queryClient.invalidateQueries({ queryKey: ['courses'] })
 		},
 		onError: (err) => {
 			notification.error({ message: 'Erreur lors de la suppression', description: err.message })
@@ -57,7 +51,7 @@ export function CourseAdminTable() {
 						icon={<PlusIcon size={16} />}
 						onClick={() => navigate('/app/admin/courses/new')}
 					>
-						Ajouter un cours
+						Créer un cours
 					</Button>
 					<Button
 						icon={<Trash2Icon size={16} />}
