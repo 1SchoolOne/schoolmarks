@@ -7,7 +7,15 @@
   "workspaceFolder": "/workspace",
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {},
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    "ghcr.io/devcontainers/features/java:1": {},
+    "ghcr.io/warrenbuckley/codespace-features/sqlite:latest": {},
+    "ghcr.io/itsmechlark/features/redis-server:1": {},
+    "ghcr.io/audacioustux/devcontainers/taskfile:1": {},
+    "ghcr.io/jsburckhardt/devcontainer-features/uv:1": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22.14.0",
+      "installYarnUsingApt": false
+    }
   },
   "forwardPorts": [8000, 8080],
   "customizations": {
@@ -18,15 +26,13 @@
         "ms-python.python",
         "ms-python.vscode-pylance",
         "charliermarsh.ruff",
-        "alexcvzz.vscode-sqlite",
         "ms-vscode.vscode-typescript-next",
         "esbenp.prettier-vscode",
         "YoavBls.pretty-ts-errors",
         "redhat.vscode-yaml",
         "dbaeumer.vscode-eslint",
         "eamodio.gitlens",
-        "jgclark.vscode-todo-highlight",
-        "cweijan.vscode-database-client2"
+        "jgclark.vscode-todo-highlight"
       ],
       "settings": {
         "git.autofetch": true,
