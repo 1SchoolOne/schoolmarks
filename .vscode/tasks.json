@@ -1,0 +1,159 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run development server",
+      "detail": "Runs Celery, DRF API and the React client in dev mode.",
+      "dependsOn": ["Run Celery", "Run API", "Run Client"],
+      "presentation": {
+        "reveal": "always",
+        "revealProblems": "never",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Run API",
+      "type": "shell",
+      "hide": true,
+      "command": "task api:run",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Run Celery",
+      "type": "shell",
+      "hide": true,
+      "command": "task api:run-celery",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Run Client",
+      "type": "shell",
+      "hide": true,
+      "command": "task client:run",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Install all dependencies",
+      "detail": "Install npm and python packages.",
+      "dependsOn": ["API: Install dependencies", "Client: Install dependencies"]
+    },
+    {
+      "label": "Format all",
+      "detail": "Format both API and client code.",
+      "dependsOn": ["API: Format", "Client: Format"]
+    },
+    {
+      "label": "Lint all",
+      "detail": "Lint both API and client code.",
+      "dependsOn": ["API: Lint", "Client: Lint"]
+    },
+    // API tasks
+    {
+      "label": "API: Make DB migrations",
+      "detail": "Generate migration files.",
+      "type": "shell",
+      "hide": false,
+      "command": "uv run manage.py makemigrations schoolmarksapi",
+      "options": {
+        "cwd": "/workspace/api"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "API: Apply DB migrations",
+      "detail": "Apply migration files to the DB.",
+      "type": "shell",
+      "hide": false,
+      "command": "task api:migrate",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "API: Install dependencies",
+      "detail": "Install python packages.",
+      "type": "shell",
+      "command": "task api:install",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "API: Lint",
+      "detail": "Lint code with ruff.",
+      "type": "shell",
+      "command": "task api:lint",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": ["$python"]
+    },
+    {
+      "label": "API: Format",
+      "detail": "Format code with ruff.",
+      "type": "shell",
+      "command": "task api:format",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    // Front tasks
+    {
+      "label": "Client: Install dependencies",
+      "detail": "Install npm packages.",
+      "type": "shell",
+      "command": "task client:install",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Client: Generate API client",
+      "detail": "Generate OpenAPI schema and typescript-axios client.",
+      "type": "shell",
+      "command": "task generate-api-client",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Client: Lint",
+      "detail": "Lint code with ESLint.",
+      "type": "shell",
+      "command": "task client:lint",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": ["$eslint-stylish"]
+    },
+    {
+      "label": "Client: Format",
+      "detail": "Format code with Prettier.",
+      "type": "shell",
+      "command": "task client:format",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+# https://taskfile.dev
+
+version: "3"
+
+vars:
+  GREETING: Hello, World!
+
+includes:
+  api:
+    taskfile: ./api/Taskfile.yml
+    dir: ./api
+
+  client:
+    taskfile: ./client/Taskfile.yml
+    dir: ./client
+
+tasks:
+  install:
+    deps: [api:install, client:install]
+
+  lint:
+    deps: [api:lint, client:lint]
+
+  format:
+    deps: [api:format, client:format]
+
+  generate-api-client:
+    deps: [api:generate-schema]
+    cmd: task client:generate-api-client
