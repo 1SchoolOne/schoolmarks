@@ -3,6 +3,10 @@
 version: '3'
 
 tasks:
+  setup:
+    deps: [install]
+    cmd: yarn postinstall
+
   install:
     cmd: yarn
 

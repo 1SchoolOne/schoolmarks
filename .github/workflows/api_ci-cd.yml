@@ -29,6 +29,62 @@ jobs:
     - name: Run Tests
       run: |
 #        uv run manage.py test
+
+  format:
+    name: Format (Ruff)
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: api
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Task
+      uses: arduino/setup-task@v2
+      with:
+        version: 3.x
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        version: "0.6.2"
+
+    - name: Install Dependencies
+      run: uv sync --all-extras --dev
+
+    - name: Check Formatting
+      run: task format
+
+  lint:
+    name: Lint (Ruff)
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: api
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Task
+      uses: arduino/setup-task@v2
+      with:
+        version: 3.x
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        version: "0.6.2"
+
+    - name: Install Dependencies
+      run: uv sync --all-extras --dev
+
+    - name: Check Linting
+      run: task lint
    
   # docker_publish_api:
   #   name: Build and Push Docker Image

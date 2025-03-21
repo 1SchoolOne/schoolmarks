@@ -9,7 +9,8 @@
         "reveal": "always",
         "revealProblems": "never",
         "panel": "new"
-      }
+      },
+      "problemMatcher": []
     },
     {
       "label": "Run API",
@@ -19,7 +20,8 @@
       "presentation": {
         "reveal": "always",
         "panel": "new"
-      }
+      },
+      "problemMatcher": []
     },
     {
       "label": "Run Celery",
@@ -29,7 +31,8 @@
       "presentation": {
         "reveal": "always",
         "panel": "new"
-      }
+      },
+      "problemMatcher": []
     },
     {
       "label": "Run Client",
@@ -39,22 +42,37 @@
       "presentation": {
         "reveal": "always",
         "panel": "new"
-      }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Setup",
+      "detail": "Configure the project to be up and running.",
+      "type": "shell",
+      "dependsOn": ["Install all dependencies"],
+      "command": "task client:setup",
+      "problemMatcher": []
     },
     {
       "label": "Install all dependencies",
       "detail": "Install npm and python packages.",
-      "dependsOn": ["API: Install dependencies", "Client: Install dependencies"]
+      "dependsOn": [
+        "API: Install dependencies",
+        "Client: Install dependencies"
+      ],
+      "problemMatcher": []
     },
     {
       "label": "Format all",
       "detail": "Format both API and client code.",
-      "dependsOn": ["API: Format", "Client: Format"]
+      "dependsOn": ["API: Format", "Client: Format"],
+      "problemMatcher": []
     },
     {
       "label": "Lint all",
       "detail": "Lint both API and client code.",
-      "dependsOn": ["API: Lint", "Client: Lint"]
+      "dependsOn": ["API: Lint", "Client: Lint"],
+      "problemMatcher": []
     },
     // API tasks
     {
@@ -69,7 +87,8 @@
       "presentation": {
         "reveal": "always",
         "panel": "new"
-      }
+      },
+      "problemMatcher": []
     },
     {
       "label": "API: Apply DB migrations",
@@ -80,7 +99,8 @@
       "presentation": {
         "reveal": "always",
         "panel": "new"
-      }
+      },
+      "problemMatcher": []
     },
     {
       "label": "API: Install dependencies",
@@ -90,7 +110,8 @@
       "presentation": {
         "reveal": "always",
         "panel": "new"
-      }
+      },
+      "problemMatcher": []
     },
     {
       "label": "API: Lint",
@@ -111,7 +132,8 @@
       "presentation": {
         "reveal": "always",
         "panel": "new"
-      }
+      },
+      "problemMatcher": []
     },
     // Front tasks
     {
@@ -122,7 +144,8 @@
       "presentation": {
         "reveal": "always",
         "panel": "new"
-      }
+      },
+      "problemMatcher": []
     },
     {
       "label": "Client: Generate API client",
@@ -132,7 +155,8 @@
       "presentation": {
         "reveal": "always",
         "panel": "new"
-      }
+      },
+      "problemMatcher": []
     },
     {
       "label": "Client: Lint",
@@ -153,7 +177,19 @@
       "presentation": {
         "reveal": "always",
         "panel": "new"
-      }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Client: Test",
+      "detail": "Run unit tests.",
+      "type": "shell",
+      "command": "task client:test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
     }
   ]
 }
