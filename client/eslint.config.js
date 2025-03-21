@@ -8,7 +8,8 @@ import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
 	{
-		files: ['src/**/*.{ts,tsx}', 'tests/**/*.{ts,tsx}'],
+    files: ['src/**/*.{ts,tsx}', 'tests/**/*.{ts,tsx}'],
+    ignores: ['src/api-client/**/*.ts'],
 		extends: [eslint.configs.recommended, ...tseslint.configs.recommended, eslintPluginPrettier],
 		languageOptions: {
 			ecmaVersion: 2020,
