@@ -74,6 +74,16 @@
       "dependsOn": ["API: Lint", "Client: Lint"],
       "problemMatcher": []
     },
+    {
+      "label": "Clean git hooks",
+      "detail": "Remove all git hooks.",
+      "command": "task clean-hooks",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
     // API tasks
     {
       "label": "API: Make DB migrations",
@@ -129,6 +139,17 @@
       "detail": "Format code with ruff.",
       "type": "shell",
       "command": "task api:format",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "API: Clean caches",
+      "detail": "Remove all __pycache__ directories.",
+      "type": "shell",
+      "command": "task clean-api-caches",
       "presentation": {
         "reveal": "always",
         "panel": "new"

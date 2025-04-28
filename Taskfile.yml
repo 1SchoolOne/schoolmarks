@@ -2,9 +2,6 @@
 
 version: "3"
 
-vars:
-  GREETING: Hello, World!
-
 includes:
   api:
     taskfile: ./api/Taskfile.yml
@@ -27,3 +24,9 @@ tasks:
   generate-api-client:
     deps: [api:generate-schema]
     cmd: task client:generate-api-client
+
+  clean-hooks:
+    cmd: ./scripts/clean-hooks.sh
+
+  clean-api-caches:
+    cmd: ./scripts/clean-api-caches.sh
