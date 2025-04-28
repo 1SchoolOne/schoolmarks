@@ -16,8 +16,6 @@ import { MainLayout, ProtectedRoute } from '@components'
 
 import { IdentityProvider } from '@contexts'
 
-import '@1schoolone/ui/dist/ui.css'
-
 dayjs.locale('fr')
 
 /**
