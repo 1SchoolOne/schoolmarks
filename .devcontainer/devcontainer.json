@@ -16,10 +16,7 @@
       "installYarnUsingApt": false
     }
   },
-  "forwardPorts": [
-    8000,
-    8080
-  ],
+  "forwardPorts": [8000, 8080],
   "customizations": {
     "vscode": {
       "extensions": [
@@ -39,8 +36,6 @@
       "settings": {
         "git.autofetch": true,
         "git.useEditorAsCommitInput": false,
-        "scm.showActionButton": false,
-        "scm.showInputActionButton": false,
         "workbench.editor.labelFormat": "short",
         "terminal.integrated.defaultProfile.macos": "zsh",
         "terminal.integrated.defaultProfile.linux": "zsh",
