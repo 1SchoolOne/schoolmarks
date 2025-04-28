@@ -7,7 +7,6 @@
   "workspaceFolder": "/workspace",
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {},
-    "ghcr.io/roul/devcontainer-features/mise-java:1": {},
     "ghcr.io/warrenbuckley/codespace-features/sqlite:latest": {},
     "ghcr.io/itsmechlark/features/redis-server:1": {},
     "ghcr.io/audacioustux/devcontainers/taskfile:1": {},
@@ -17,7 +16,10 @@
       "installYarnUsingApt": false
     }
   },
-  "forwardPorts": [8000, 8080],
+  "forwardPorts": [
+    8000,
+    8080
+  ],
   "customizations": {
     "vscode": {
       "extensions": [
@@ -49,11 +51,15 @@
           "textMateRules": [
             {
               "scope": "comment",
-              "settings": { "fontStyle": "italic" }
+              "settings": {
+                "fontStyle": "italic"
+              }
             },
             {
               "scope": "storage,entity,variable",
-              "settings": { "fontStyle": "" }
+              "settings": {
+                "fontStyle": ""
+              }
             }
           ]
         },

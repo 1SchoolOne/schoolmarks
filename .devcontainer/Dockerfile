@@ -5,3 +5,6 @@ USER vscode
 RUN sudo rm /bin/sh && sudo ln -s /bin/bash /bin/sh
 
 ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+
+RUN sudo apt update
+RUN sudo apt install default-jre -y
