@@ -473,6 +473,12 @@ export interface Class {
  */
 export interface ClassCreateWithStudents {
     /**
+     * ID de la classe à mettre à jour (requis pour les requêtes PUT)
+     * @type {string}
+     * @memberof ClassCreateWithStudents
+     */
+    'class_id'?: string;
+    /**
      * 
      * @type {ClassInput}
      * @memberof ClassCreateWithStudents
@@ -3598,43 +3604,6 @@ export const ClassesApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Crée une classe et ajouter les étudiants en une opération
-         * @param {ClassCreateWithStudents} classCreateWithStudents 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        classesCreateWithStudentsCreate: async (classCreateWithStudents: ClassCreateWithStudents, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'classCreateWithStudents' is not null or undefined
-            assertParamExists('classesCreateWithStudentsCreate', 'classCreateWithStudents', classCreateWithStudents)
-            const localVarPath = `/classes/create_with_students/`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication CsrfExemptSessionAuthentication required
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(classCreateWithStudents, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * 
          * @param {string} id A UUID string identifying this class.
          * @param {*} [options] Override http request option.
@@ -3942,6 +3911,80 @@ export const ClassesApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Crée une classe et ajouter les étudiants en une opération
+         * @param {ClassCreateWithStudents} classCreateWithStudents 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        classesWithStudentsCreate: async (classCreateWithStudents: ClassCreateWithStudents, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'classCreateWithStudents' is not null or undefined
+            assertParamExists('classesWithStudentsCreate', 'classCreateWithStudents', classCreateWithStudents)
+            const localVarPath = `/classes/with_students/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication CsrfExemptSessionAuthentication required
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(classCreateWithStudents, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Crée une classe et ajouter les étudiants en une opération
+         * @param {ClassCreateWithStudents} classCreateWithStudents 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        classesWithStudentsUpdate: async (classCreateWithStudents: ClassCreateWithStudents, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'classCreateWithStudents' is not null or undefined
+            assertParamExists('classesWithStudentsUpdate', 'classCreateWithStudents', classCreateWithStudents)
+            const localVarPath = `/classes/with_students/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication CsrfExemptSessionAuthentication required
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(classCreateWithStudents, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -3986,18 +4029,6 @@ export const ClassesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.classesCreate(classInput, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ClassesApi.classesCreate']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Crée une classe et ajouter les étudiants en une opération
-         * @param {ClassCreateWithStudents} classCreateWithStudents 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async classesCreateWithStudentsCreate(classCreateWithStudents: ClassCreateWithStudents, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassCreateWithStudentsResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.classesCreateWithStudentsCreate(classCreateWithStudents, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ClassesApi.classesCreateWithStudentsCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -4101,6 +4132,30 @@ export const ClassesApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['ClassesApi.classesUpdateStudentsCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * Crée une classe et ajouter les étudiants en une opération
+         * @param {ClassCreateWithStudents} classCreateWithStudents 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async classesWithStudentsCreate(classCreateWithStudents: ClassCreateWithStudents, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassCreateWithStudentsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.classesWithStudentsCreate(classCreateWithStudents, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ClassesApi.classesWithStudentsCreate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Crée une classe et ajouter les étudiants en une opération
+         * @param {ClassCreateWithStudents} classCreateWithStudents 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async classesWithStudentsUpdate(classCreateWithStudents: ClassCreateWithStudents, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassCreateWithStudentsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.classesWithStudentsUpdate(classCreateWithStudents, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ClassesApi.classesWithStudentsUpdate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -4137,15 +4192,6 @@ export const ClassesApiFactory = function (configuration?: Configuration, basePa
          */
         classesCreate(classInput: ClassInput, options?: RawAxiosRequestConfig): AxiosPromise<ClassInput> {
             return localVarFp.classesCreate(classInput, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Crée une classe et ajouter les étudiants en une opération
-         * @param {ClassCreateWithStudents} classCreateWithStudents 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        classesCreateWithStudentsCreate(classCreateWithStudents: ClassCreateWithStudents, options?: RawAxiosRequestConfig): AxiosPromise<ClassCreateWithStudentsResponse> {
-            return localVarFp.classesCreateWithStudentsCreate(classCreateWithStudents, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -4224,6 +4270,24 @@ export const ClassesApiFactory = function (configuration?: Configuration, basePa
         classesUpdateStudentsCreate(id: string, updateClassStudents: UpdateClassStudents, options?: RawAxiosRequestConfig): AxiosPromise<Class> {
             return localVarFp.classesUpdateStudentsCreate(id, updateClassStudents, options).then((request) => request(axios, basePath));
         },
+        /**
+         * Crée une classe et ajouter les étudiants en une opération
+         * @param {ClassCreateWithStudents} classCreateWithStudents 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        classesWithStudentsCreate(classCreateWithStudents: ClassCreateWithStudents, options?: RawAxiosRequestConfig): AxiosPromise<ClassCreateWithStudentsResponse> {
+            return localVarFp.classesWithStudentsCreate(classCreateWithStudents, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Crée une classe et ajouter les étudiants en une opération
+         * @param {ClassCreateWithStudents} classCreateWithStudents 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        classesWithStudentsUpdate(classCreateWithStudents: ClassCreateWithStudents, options?: RawAxiosRequestConfig): AxiosPromise<ClassCreateWithStudentsResponse> {
+            return localVarFp.classesWithStudentsUpdate(classCreateWithStudents, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -4265,17 +4329,6 @@ export class ClassesApi extends BaseAPI {
      */
     public classesCreate(classInput: ClassInput, options?: RawAxiosRequestConfig) {
         return ClassesApiFp(this.configuration).classesCreate(classInput, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Crée une classe et ajouter les étudiants en une opération
-     * @param {ClassCreateWithStudents} classCreateWithStudents 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ClassesApi
-     */
-    public classesCreateWithStudentsCreate(classCreateWithStudents: ClassCreateWithStudents, options?: RawAxiosRequestConfig) {
-        return ClassesApiFp(this.configuration).classesCreateWithStudentsCreate(classCreateWithStudents, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4369,6 +4422,28 @@ export class ClassesApi extends BaseAPI {
      */
     public classesUpdateStudentsCreate(id: string, updateClassStudents: UpdateClassStudents, options?: RawAxiosRequestConfig) {
         return ClassesApiFp(this.configuration).classesUpdateStudentsCreate(id, updateClassStudents, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Crée une classe et ajouter les étudiants en une opération
+     * @param {ClassCreateWithStudents} classCreateWithStudents 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClassesApi
+     */
+    public classesWithStudentsCreate(classCreateWithStudents: ClassCreateWithStudents, options?: RawAxiosRequestConfig) {
+        return ClassesApiFp(this.configuration).classesWithStudentsCreate(classCreateWithStudents, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Crée une classe et ajouter les étudiants en une opération
+     * @param {ClassCreateWithStudents} classCreateWithStudents 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ClassesApi
+     */
+    public classesWithStudentsUpdate(classCreateWithStudents: ClassCreateWithStudents, options?: RawAxiosRequestConfig) {
+        return ClassesApiFp(this.configuration).classesWithStudentsUpdate(classCreateWithStudents, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

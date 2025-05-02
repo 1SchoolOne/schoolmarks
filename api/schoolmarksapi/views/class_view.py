@@ -39,7 +39,7 @@ class ClassViewSet(viewsets.ModelViewSet):
             return UpdateClassCoursesSerializer
         if self.action == "update_students":
             return UpdateClassStudentsSerializer
-        if self.action == "create_with_students":
+        if self.action == "with_students":
             return ClassCreateWithStudentsSerializer
         elif self.action == "bulk_delete":
             return BulkDeleteClassSerializer
@@ -137,24 +137,62 @@ class ClassViewSet(viewsets.ModelViewSet):
             },
         ),
     )
-    @action(detail=False, methods=["post"])
-    def create_with_students(self, request):
+    @action(detail=False, methods=["post", "put"])
+    def with_students(self, request):
         """Crée une classe et ajouter les étudiants en une opération"""
 
-        serializer = self.get_serializer(data=request.data)
+        if request.method == "POST":
+            serializer = self.get_serializer(data=request.data)
 
-        if serializer.is_valid():
-            result = serializer.save()
-            return Response(
-                {
-                    "class": ClassSerializer(result["class"]).data,
-                    "added_students": result["added_students"],
-                    "added_courses": result["added_courses"],
-                },
-                status=status.HTTP_201_CREATED,
-            )
+            if serializer.is_valid():
+                result = serializer.save()
+                return Response(
+                    {
+                        "class": ClassSerializer(result["class"]).data,
+                        "added_students": result["added_students"],
+                        "added_courses": result["added_courses"],
+                    },
+                    status=status.HTTP_201_CREATED,
+                )
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        elif request.method == "PUT":
+            # For PUT, you need to get the instance to update.
+            # You can get the class_id from the request data.
+            class_id = request.data.get("class_id")
+
+            if not class_id:
+                return Response(
+                    {"class_id": "This field is required for PUT requests."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            try:
+                class_instance = Class.objects.get(id=class_id)
+            except Class.DoesNotExist:
+                return Response(
+                    {"detail": "Class not found."}, status=status.HTTP_404_NOT_FOUND
+                )
+
+            serializer = self.get_serializer(
+                class_instance,
+                data=request.data,
+                partial=True,
+                context={"instance": class_instance},
+            )  # Use partial=True to allow partial updates
+            if serializer.is_valid():
+                result = serializer.save()
+
+                return Response(
+                    {
+                        "class": ClassSerializer(result["class"]).data,
+                        "updated_students_count": result["updated_students_count"],
+                        "updated_courses_count": result["updated_courses_count"],
+                    },
+                    status=status.HTTP_200_OK,
+                )
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @extend_schema(
         request=UpdateClassStudentsSerializer,

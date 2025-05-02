@@ -984,9 +984,35 @@ paths:
               schema:
                 $ref: '#/components/schemas/BulkDeleteClassResponse'
           description: ''
-  /classes/create_with_students/:
+  /classes/with_students/:
     post:
-      operationId: classes_create_with_students_create
+      operationId: classes_with_students_create
+      description: Crée une classe et ajouter les étudiants en une opération
+      tags:
+      - classes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassCreateWithStudents'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClassCreateWithStudents'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClassCreateWithStudents'
+        required: true
+      security:
+      - CsrfExemptSessionAuthentication: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClassCreateWithStudentsResponse'
+          description: ''
+    put:
+      operationId: classes_with_students_update
       description: Crée une classe et ajouter les étudiants en une opération
       tags:
       - classes
@@ -1988,6 +2014,10 @@ components:
     ClassCreateWithStudents:
       type: object
       properties:
+        class_id:
+          type: string
+          format: uuid
+          description: ID de la classe à mettre à jour (requis pour les requêtes PUT)
         class_data:
           $ref: '#/components/schemas/ClassInput'
         student_ids:

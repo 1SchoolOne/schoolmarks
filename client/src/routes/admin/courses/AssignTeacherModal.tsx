@@ -27,7 +27,7 @@ export function AssignTeacherModal(props: AssignTeacherModalProps) {
 
 	const { data: teachers } = useQuery({
 		queryKey: ['users', { role: 'teacher' }],
-		queryFn: () => usersApi.usersList({ params: { role: 'teacher' } }).then(({ data }) => data),
+		queryFn: () => usersApi.usersList('teacher').then(({ data }) => data),
 	})
 
 	const { mutate: assignTeacher, isPending } = useMutation({

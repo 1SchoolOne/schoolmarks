@@ -8,10 +8,6 @@ import { ProtectedRoute } from '@components'
 import { Route } from '@types'
 
 import { ClassAdminTable } from './classes/ClassAdminTable'
-import { CreateClassForm } from './classes/CreateClassForm/CreateClassForm'
-import { EditClassModal } from './classes/EditClassModal'
-import { EnrollCourses } from './classes/EnrollCourses'
-import { EnrollStudents } from './classes/EnrollStudents'
 import { CourseAdminTable } from './courses/CourseAdminTable'
 import { CourseForm } from './courses/CourseForm'
 import { ImportCategories } from './import/ImportCategories'
@@ -95,39 +91,6 @@ export function getAdminRoute(queryClient: QueryClient): Route {
 					{
 						index: true,
 						element: <ClassAdminTable />,
-					},
-					{
-						path: 'new',
-						handle: {
-							crumb: {
-								label: 'Créer une classe',
-								path: 'new',
-							},
-						},
-						loader: () => createClassLoader(queryClient),
-						element: <CreateClassForm />,
-					},
-					{
-						path: 'edit/:classId',
-						loader: ({ params }) => classLoader({ queryClient, classId: params.classId }),
-						element: (
-							<>
-								<ClassAdminTable />
-								<EditClassModal />
-							</>
-						),
-					},
-					{
-						path: ':classId/enroll-students',
-						loader: ({ params }) => enrollStudentsLoader({ queryClient, classId: params.classId }),
-						element: <EnrollStudents />,
-						errorElement: <EnrollStudents.ErrorBoundary />,
-					},
-					{
-						path: ':classId/enroll-courses',
-						loader: ({ params }) => enrollCoursesLoader({ queryClient, classId: params.classId }),
-						element: <EnrollCourses />,
-						errorElement: <EnrollCourses.ErrorBoundary />,
 					},
 				],
 			},

@@ -1,5 +1,6 @@
 import { getLocalStorage } from '@1schoolone/ui'
 
+// TODO: update local storage keys and group them here
 interface LocalStorage {
 	accessToken: string | null
 	refreshToken: string | null
