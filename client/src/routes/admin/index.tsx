@@ -13,8 +13,7 @@ import { EditClassModal } from './classes/EditClassModal'
 import { EnrollCourses } from './classes/EnrollCourses'
 import { EnrollStudents } from './classes/EnrollStudents'
 import { CourseAdminTable } from './courses/CourseAdminTable'
-import { CreateCourse } from './courses/CreateCourse'
-import { EditCourseModal } from './courses/EditCourseModal'
+import { CourseForm } from './courses/CourseForm'
 import { ImportCategories } from './import/ImportCategories'
 import { ImportClasses } from './import/classes/ImportClasses'
 import { ImportClassesDetail } from './import/classes/ImportClassesDetail'
@@ -149,16 +148,20 @@ export function getAdminRoute(queryClient: QueryClient): Route {
 					},
 					{
 						path: 'new',
-						loader: () => teachersLoader(queryClient),
-						element: <CreateCourse />,
-					},
-					{
-						path: 'edit/:courseId',
-						loader: ({ params }) => editCourseLoader({ queryClient, courseId: params.courseId }),
 						element: (
 							<>
 								<CourseAdminTable />
-								<EditCourseModal />
+								<CourseForm />
+							</>
+						),
+					},
+					{
+						path: 'edit/:courseId',
+						loader: ({ params }) => courseLoader({ queryClient, courseId: params.courseId }),
+						element: (
+							<>
+								<CourseAdminTable />
+								<CourseForm />
 							</>
 						),
 					},
@@ -356,14 +359,7 @@ export function coursesLoader(queryClient: QueryClient) {
 	})
 }
 
-export function teachersLoader(queryClient: QueryClient) {
-	return queryClient.fetchQuery({
-		queryKey: ['users', { role: 'teacher' }],
-		queryFn: () => usersApi.usersList('teacher').then(({ data }) => data),
-	})
-}
-
-export async function editCourseLoader(params: {
+export async function courseLoader(params: {
 	queryClient: QueryClient
 	courseId: string | undefined
 }) {
@@ -371,18 +367,10 @@ export async function editCourseLoader(params: {
 
 	if (!courseId) throw new Error('courseId is undefined')
 
-	const [course, teachers] = await Promise.all([
-		queryClient.fetchQuery({
-			queryKey: ['courses', courseId],
-			queryFn: () => coursesApi.coursesRetrieve(courseId).then(({ data }) => data),
-		}),
-		queryClient.fetchQuery({
-			queryKey: ['users', { role: 'teacher' }],
-			queryFn: () => usersApi.usersList('teacher').then(({ data }) => data),
-		}),
-	])
-
-	return { course, teachers }
+	return queryClient.fetchQuery({
+		queryKey: ['courses', courseId],
+		queryFn: () => coursesApi.coursesRetrieve(courseId).then(({ data }) => data),
+	})
 }
 
 export async function createClassLoader(queryClient: QueryClient) {
