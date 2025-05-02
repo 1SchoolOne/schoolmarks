@@ -8,24 +8,73 @@ vars:
 tasks:
   install:
     cmd: uv sync
+    sources:
+      - pyproject.toml
+      - uv.lock
+    generates:
+      - .venv/lib/**/*
+    summary: Install dependencies
+    desc: |
+      This task installs the dependencies for the project using `uv sync`.
+      It ensures that the virtual environment is set up with the required packages.
 
   run:
     cmd: uv run manage.py runserver --settings={{.DJANGO_SETTINGS_MODULE}}
+    summary: Run the Django development server
+    desc: |
+      This task starts the Django development server using `uv run`.
+      It allows you to test the application locally.
 
   run-celery:
     cmd: DJANGO_SETTINGS_MODULE={{.DJANGO_SETTINGS_MODULE}} uv run celery -A common worker -l info
+    summary: Run the Celery worker
+    desc: |
+      This task starts the Celery worker using `uv run`.
+      It allows you to process background tasks asynchronously.
 
   generate-schema:
     cmd: uv run manage.py spectacular --file openapi-schema.yml
+    sources:
+      - schoolmarksapi/models/*.py
+      - schoolmarksapi/serializers/*.py
+      - schoolmarksapi/views/*.py
+    generates:
+      - openapi-schema.yml
+    summary: Generate OpenAPI schema
+    desc: |
+      This task generates the OpenAPI schema for the API using `uv run`.
+      It creates a file named `openapi-schema.yml` based on the models, serializers, and views.
 
   lint:
     cmd: uvx ruff check
+    sources:
+      - common/**/*.py
+      - schoolmarksapi/**/*.py
+    summary: Lint the code
+    desc: |
+      This task runs the linter on the codebase using `uvx ruff`.
+      It checks for style violations and potential errors in the code.
 
   format:
     cmd: uvx ruff format
+    sources:
+      - common/**/*.py
+      - schoolmarksapi/**/*.py
+    summary: Format the code
+    desc: |
+      This task formats the codebase using `uvx ruff`.
+      It applies consistent formatting to the code according to the defined style guidelines.
 
   make-migrations:
     cmd: uv run manage.py makemigrations schoolmarksapi
+    summary: Make migrations for the Django app
+    desc: |
+      This task creates new migrations for the Django app using `uv run`.
+      It generates migration files based on the changes in the models.
 
   migrate:
     cmd: uv run manage.py migrate
+    summary: Apply migrations to the database
+    desc: |
+      This task applies the migrations to the database using `uv run`.
+      It updates the database schema based on the migration files.

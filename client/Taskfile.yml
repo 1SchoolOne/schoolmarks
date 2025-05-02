@@ -9,21 +9,69 @@ tasks:
 
   install:
     cmd: yarn
+    sources:
+      - package.json
+      - yarn.lock
+    generates:
+      - node_modules/.yarn-state.yml
+    summary: Install dependencies
+    desc: |
+      This task installs the project dependencies using Yarn.
+      It ensures that the node_modules directory is up to date.
 
   run:
     cmd: yarn dev
+    summary: Run the development server
+    desc: |
+      This task starts the development server using Yarn.
+      It allows for local development and testing of the application.
 
   build:
     cmd: yarn build
+    sources:
+      - src/**/*.{ts,tsx,less}
+      - tsconfig.json
+      - tsconfig.app.json
+      - tsconfig.node.json
+    generates:
+      - build/**
+    summary: Build the project
+    desc: |
+      This task builds the project using Yarn.
+      It compiles the TypeScript and Less files into the build directory.
 
   lint:
     cmd: yarn lint
+    sources:
+      - src/**/*.{ts,tsx,less}
+    summary: Lint the code
+    desc: |
+      This task runs the linter on the project code using ESLint.
+      It checks for code style issues and potential errors.
 
   format:
     cmd: yarn format
+    sources:
+      - src/**/*.{ts,tsx,less}
+    summary: Format the code
+    desc: |
+      This task formats the project code using Prettier.
+      It ensures that the code is consistently formatted according to the defined style.
 
   test:
     cmd: yarn test
+    summary: Run tests
+    desc: |
+      This task runs the tests for the project using Vitest.
+      It ensures that the code is functioning as expected and that there are no regressions.
 
   generate-api-client:
     cmd: yarn generate-api-client
+    sources:
+      - ../api/openapi-schema.yml
+    generates:
+      - src/api-client/**/*
+    summary: Generate API client code
+    desc: |
+      This task generates the API client code based on the OpenAPI schema.
+      It ensures that the client code is up to date with the API specifications.

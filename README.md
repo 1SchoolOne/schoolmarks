@@ -28,10 +28,14 @@ A React application built with Vite for managing school marks and academic perfo
 
 ### 2. Setup Project
 
-The project includes a Makefile to help you set up the development environment quickly:
+The project includes multiple [Taskfile](https://taskfile.dev/) to help you set up the development environment quickly.
+
+> [!NOTE]
+> Most of these tasks are available through VS Code commande palette.
+> Hit `CMD + Shift + P` or `CTRL + Shift + P`, search for `Tasks: Run Task` and it will list all the available tasks.
 
 ```sh
-make setup
+task install
 ```
 
 This command will:
@@ -39,28 +43,43 @@ This command will:
 - Install project dependencies
 - Set up git hooks
 
-Then, to start the development server:
-
-```sh
-make dev
-```
+To start the development server, run the `Run development server` VS Code task.
 
 This command will start the API, Celery and the client.
 
-### Available Make Commands
+### Available Global Tasks
 
-| Command              | Description                                             |
-| -------------------- | ------------------------------------------------------- |
-| `make setup`         | Complete project setup (install dependencies and hooks) |
-| `make install-api`   | Install the API dependencies                            |
-| `make install-client`| Install the client dependencies                         |
-| `make install-hooks` | Install git hooks only                                  |
-| `make clean-hooks`   | Clean git hooks                                         |
-| `make lint`          | Lint the code                                           |
-| `make lint-api`      | Lint the API code                                       |
-| `make lint-client`   | Lint the client code                                    |
-| `make dev`           | Run the development server                              |
-| `make help`          | Show available make commands                            |
+| Command                    | Description                                 |
+| -------------------------- | ------------------------------------------- |
+| `task install`             | Install all dependencies for API and client |
+| `task lint`                | Run linting for both API and client         |
+| `task format`              | Format code in both API and client projects |
+| `task generate-api-client` | Generate API client code based on schema    |
+
+### Available API Tasks
+
+| Command                    | Description                       |
+| -------------------------- | --------------------------------- |
+| `task api:install`         | Install dependencies              |
+| `task api:run`             | Run the Django development server |
+| `task api:run-celery`      | Run the Celery worker             |
+| `task api:generate-schema` | Generate OpenAPI schema client    |
+| `task api:lint`            | Lint the code                     |
+| `task api:format`          | Format the code                   |
+| `task api:make-migrations` | Generate migration files          |
+| `task api:migrate`         | Apply migrations to the database  |
+
+### Available Client Tasks
+
+| Command                           | Description                |
+| --------------------------------- | -------------------------- |
+| `task client:install`             | Install dependencies       |
+| `task client:run`                 | Run the development server |
+| `task client:build`               | Build the project          |
+| `task client:lint`                | Lint the code              |
+| `task client:format`              | Format the code            |
+| `task client:test`                | Run tests                  |
+| `task client:generate-api-client` | Generate API client code   |
 
 ## Development
 
@@ -88,13 +107,12 @@ Enable Django Debug Mode in the `manage.py` file:
 
 ```manage.py
 'schoolmarksapi.settings.debug'
-or prod : 
+or prod :
 'schoolmarksapi.settings.prod'
 
 ```
 
 > [!WARNING] Do not enable DEBUG mode in production.
-
 
 ### Client
 
@@ -104,8 +122,7 @@ or prod :
 - `.env.development`: Required. Contains default non-sensitive development values.
 - `.env.production`: Contains default non-sensitive production values.
 
-> [!IMPORTANT]
-> `.env.production` contains standardized production values and should not be modified.
+> [!IMPORTANT] > `.env.production` contains standardized production values and should not be modified.
 
 ## Troubleshooting
 

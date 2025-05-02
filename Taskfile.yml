@@ -14,12 +14,24 @@ includes:
 tasks:
   install:
     deps: [api:install, client:install]
+    summary: Install dependencies for both API and client
+    desc: |
+      This task installs dependencies for both the API and client projects.
+      It runs the install tasks defined in the respective Taskfiles.
 
   lint:
     deps: [api:lint, client:lint]
+    summary: Lint code for both API and client
+    desc: |
+      This task runs the linting tasks defined in the respective Taskfiles.
+      It ensures that the code adheres to the defined style guidelines.
 
   format:
     deps: [api:format, client:format]
+    summary: Format code for both API and client
+    desc: |
+      This task runs the formatting tasks defined in the respective Taskfiles.
+      It ensures that the code is formatted consistently.
 
   generate-api-client:
     deps: [api:generate-schema]
@@ -30,3 +42,7 @@ tasks:
 
   clean-api-caches:
     cmd: ./scripts/clean-api-caches.sh
+    summary: Generate API client code
+    desc: |
+      This task generates the API client code based on the schema defined in the API project.
+      It runs the generate-api-client task defined in the client Taskfile.
