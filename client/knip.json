@@ -1,0 +1,22 @@
+{
+	"$schema": "https://unpkg.com/knip@5/schema.json",
+	"project": [
+		"./src/**/*.{ts,tsx}",
+		"./tests/**/*.ts",
+		"!./src/api-client/api.ts",
+		"!./src/api-client/base.ts",
+		"!./src/api-client/common.ts",
+		"!./src/api-client/configuration.ts"
+	],
+	"paths": {
+		"@api/*": ["./src/api/*"],
+		"@apiClient": ["./src/api-client/index.ts"],
+		"@assets/*": ["./src/assets/*"],
+		"@components": ["./src/components/index.ts"],
+		"@contexts": ["./src/contexts/index.ts"],
+		"@helpers/*": ["./src/helpers/*"],
+		"@routes/*": ["./src/routes/*"],
+		"@types": ["./src/types/index.ts"],
+		"@utils/*": ["./src/utils/*"]
+	}
+}

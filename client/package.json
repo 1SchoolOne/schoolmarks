@@ -16,7 +16,8 @@
 		"test:watch": "vitest watch",
 		"preview": "vite preview",
 		"generate-api-client": "openapi-generator-cli generate -i ../api/openapi-schema.yml -g typescript-axios -o ./src/api-client",
-		"postinstall": "cd .. && husky client/.husky"
+		"postinstall": "cd .. && husky client/.husky",
+		"knip": "knip"
 	},
 	"dependencies": {
 		"@1schoolone/ui": "1.1.0",
@@ -52,6 +53,7 @@
 		"globals": "15.11.0",
 		"husky": "9.1.7",
 		"jsdom": "25.0.1",
+		"knip": "5.52.0",
 		"less": "4.2.0",
 		"msw": "2.7.0",
 		"openapi-typescript": "7.4.3",
