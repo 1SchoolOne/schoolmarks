@@ -4,7 +4,7 @@ import { HttpResponse, http } from 'msw'
 import { SessionResponse } from '@api/auth'
 import { API_BASE_URL } from '@api/axios'
 
-import { GetClassSessionByIdResponse } from '../src/types/api/classSessions'
+import { ClassSession } from '@apiClient'
 
 export const roleHandler = {
 	admin: http.get(`${API_BASE_URL}/_allauth/browser/v1/auth/session`, () => {
@@ -71,14 +71,37 @@ export const roleHandler = {
 
 export const commonHandlers = [
 	http.get(`${API_BASE_URL}/class_sessions/`, () => {
-		return HttpResponse.json<GetClassSessionByIdResponse[]>([
+		return HttpResponse.json<ClassSession[]>([
 			{
 				id: '1',
 				room: '3.02',
 				date: dayjs().format('YYYY-MM-DD'),
 				start_time: dayjs().format('HH:mm:ss'),
 				end_time: dayjs().add(5, 'minutes').format('HH:mm:ss'),
-				status: 'scheduled',
+				course: {
+					id: '1',
+					name: 'Micro Services',
+					code: 'MS_101',
+					professor: {
+						id: 1,
+						username: 'robin.penea',
+						first_name: 'Robin',
+						last_name: 'Penea',
+						email: 'robin.penea@email.fr',
+						role: 'teacher',
+					},
+					created_at: dayjs().format('YYYY-MM-DD'),
+					updated_at: dayjs().format('YYYY-MM-DD'),
+				},
+				class_group: {
+					id: '1',
+					name: 'M2 Lead Dev',
+					code: 'M2I_Dev',
+					year_of_graduation: dayjs().year(),
+					students: [],
+					created_at: dayjs().format('YYYY-MM-DD'),
+					updated_at: dayjs().format('YYYY-MM-DD'),
+				},
 				checkin_session: {
 					id: '1',
 					class_session: '1',
@@ -91,13 +114,36 @@ export const commonHandlers = [
 		])
 	}),
 	http.get(`${API_BASE_URL}/class_sessions/*`, () => {
-		return HttpResponse.json<GetClassSessionByIdResponse>({
+		return HttpResponse.json<ClassSession>({
 			id: '1',
 			room: '3.02',
 			date: dayjs().format('YYYY-MM-DD'),
 			start_time: dayjs().format('HH:mm:ss'),
 			end_time: dayjs().add(5, 'minutes').format('HH:mm:ss'),
-			status: 'scheduled',
+			course: {
+				id: '1',
+				name: 'Micro Services',
+				code: 'MS_101',
+				professor: {
+					id: 1,
+					username: 'robin.penea',
+					first_name: 'Robin',
+					last_name: 'Penea',
+					email: 'robin.penea@email.fr',
+					role: 'teacher',
+				},
+				created_at: dayjs().format('YYYY-MM-DD'),
+				updated_at: dayjs().format('YYYY-MM-DD'),
+			},
+			class_group: {
+				id: '1',
+				name: 'M2 Lead Dev',
+				code: 'M2I_Dev',
+				year_of_graduation: dayjs().year(),
+				students: [],
+				created_at: dayjs().format('YYYY-MM-DD'),
+				updated_at: dayjs().format('YYYY-MM-DD'),
+			},
 			checkin_session: {
 				id: '1',
 				class_session: '1',

@@ -12,7 +12,7 @@ import {
 	UsersApi,
 } from '../api-client'
 
-const API_BASE_URL = import.meta.env.VITE_API_HOST
+export const API_BASE_URL = import.meta.env.VITE_API_HOST
 export const AXIOS_DEFAULT_CONFIG = {
 	baseURL: API_BASE_URL,
 	withCredentials: true,
